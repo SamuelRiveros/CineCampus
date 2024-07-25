@@ -1,0 +1,19 @@
+{
+  "name": "cinecampus",
+  "version": "1.0.0",
+  "main": "main.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch --env-file=.env main.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "mongodb": "^6.8.0"
+  }
+}
