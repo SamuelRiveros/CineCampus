@@ -1,4 +1,4 @@
-import { connect } from "../../helper/db/connect.js";
+import { connect } from "../../connect.js";
 import { ObjectId } from "mongodb";
 
 export class Funciones extends connect {

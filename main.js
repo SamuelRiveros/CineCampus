@@ -1,4 +1,8 @@
 import { connect } from "./connect.js";
+import { Peliculas } from "./js/modules/pelicula.js";
+import { Funciones } from "./js/modules/funcion.js";
+import { Clientes } from "./js/modules/cliente.js";
+import { Boletas } from "./js/modules/boleta.js";
 
 
 // testeo de conexion
@@ -18,3 +22,6 @@ import { connect } from "./connect.js";
 // }
 
 // main();
+
+//let caso = new Peliculas()
+//caso.listAllMovies()

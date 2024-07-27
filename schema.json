@@ -1,6 +1,0 @@
-{
-    "pelicula" : [" 'titulo','genero','duracion','sinopsis'"],
-    "funcion" : [" 'Pelicula_id','horario_proyeccion', 'nombre_sala'"],
-    "cliente" : [" 'nombre','telefono','email','tipo_usuario ( tambien es enum, que dice que si es casual o vip, pero creo que con el campo de targeta_vip basta por que deducimos que cuando tiene targeta vip es usuario vip )','targeta_vip ( este es un enum, entonces seria o si o no )'"],
-    "boleta" : [" 'id_cliente','tipo_pago (enum, contiene presencial o online) ','precio','columna','fila','id_funcion' "]
-}
