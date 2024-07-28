@@ -135,5 +135,25 @@ export class Boletas extends connect {
         return res;
     } 
     
+    // ----------- Asignación de Asientos, Caso de uso #3 ----------- //
     
+    //API para Reservar Asientos: Permitir la selección y reserva de asientos para una proyección específica.
+
+    //* Ya es posible, lo realizamos en el método "BuyATicket", ya que este metodo contiene las propiedades que nos pide la consulta
+
+    //API para Cancelar Reserva de Asientos: Permitir la cancelación de una reserva de asiento ya realizada.
+
+    //* Sabemos que, al cancelar un asiento basicamente cancelamos la ida a la función, por lo tanto podemos eliminar el boleto ingresado, no hay boleto sin un asiento reservado, es lo normal en un cine ( no nos vamos a sentar en el piso 🥵)
+
+    async cancelSeat(){
+        try {
+            let res = await this.collection.deleteOne({"_id" : new ObjectId("66a5b4ed51b8bc807e8a6b5a")})
+            console.log("Reserva eliminada correctamente")
+            return res;
+        } catch(error) {
+            console.log("Error al cancelar asiento:", error);
+        } finally {
+            await this.conexion.close()
+        }
+    }
 }
