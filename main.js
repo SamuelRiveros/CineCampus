@@ -5,4 +5,4 @@ import { Clientes } from "./js/modules/cliente.js";
 import { Boletas } from "./js/modules/boleta.js";
 
 let caso = new Boletas()
-console.log(await caso.BuyATicket())
+console.log(await caso.testfunciones())
