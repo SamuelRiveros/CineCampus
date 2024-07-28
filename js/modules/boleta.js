@@ -47,62 +47,65 @@ export class Boletas extends connect {
     }
 
     //API para Verificar Disponibilidad de Asientos: Permitir la consulta de la disponibilidad de asientos en una sala para una proyección específica.
-    //consulta para Verificar Disponibilidad de Asientos: Permitir la consulta de la disponibilidad de asientos en una sala para una proyección específica.
 
-    async seatsReview(peliculaId, horarioProyeccion, sala) {
-
+    async seatsReview(funcionId, sala) {
         try {
+            // Buscar la función por ID
             const funcion = await this.funcionCollection.findOne({
-                Pelicula_id: peliculaId,
-                horario_proyeccion: horarioProyeccion
-              });
-    
+                _id: new ObjectId(funcionId)
+            });
+
             if (!funcion) {
-            console.log('No se encontró la función especificada');
-            return;
+                console.log('No se encontró la función especificada');
+                return;
             }
-    
+
+            // Buscar las boletas asociadas a la función y sala
             const boletas = await this.collection.find({
                 id_funcion: funcion._id,
                 sala: sala
-              }).toArray();
-    
-            const totalFilas = 10
-            const totalColumnas = 26
-            const asientosTotales = totalFilas * totalColumnas
-    
+            }).toArray();
+
+            // Configuración de asientos
+            const totalFilas = 10;
+            const totalColumnas = 26;
             const asientos = Array.from({ length: totalFilas }, () => Array(totalColumnas).fill(0));
-    
+
             // Función para convertir columna de letra a índice numérico
             function columnaAIndice(columna) {
-            return columna.charCodeAt(0) - 65; // 'A' tiene el valor 65 en ASCII
+                return columna.charCodeAt(0) - 65; // 'A' tiene el valor 65 en ASCII
             }
 
             // Marcar los asientos ocupados
             boletas.forEach(boleta => {
                 const { fila, columna } = boleta;
                 const columnaIndex = columnaAIndice(columna);
-                asientos[fila][columnaIndex] = 1;
+                if (fila < totalFilas && columnaIndex < totalColumnas) {
+                    asientos[fila][columnaIndex] = 1;
+                }
             });
-        
+
             // Mostrar los asientos disponibles
             console.log('Disponibilidad de asientos (0: disponible, 1: ocupado):');
             console.log(asientos);
-        
-            // Puedes devolver los asientos disponibles si es necesario
-            return asientos;
-            } catch(error){
-                console.log("Error al encontrar asientos")
-            }
+        } catch (error) {
+            console.log("Error al encontrar asientos:", error);
+        } finally {
+            await this.close(); //* Cierre de la conexión
+        }
     }
+    
 
     /**
      * *Solo un testeo de que la llamada de las funciones están funcionando
-     * @returns 
+     * @returns todos los documentos de las funciones que hay en la coleccion "funcion"
      */
+
     async testfunciones(){
         let res = await this.funcionCollection.find({}).toArray()
+        await this.close()
         return res;
-    }
-
+    } 
+    
+    
 }
