@@ -4,5 +4,5 @@ import { Funciones } from "./js/modules/funcion.js";
 import { Clientes } from "./js/modules/cliente.js";
 import { Boletas } from "./js/modules/boleta.js";
 
-let caso = new Peliculas()
-console.log(await caso.listAllMovies())
+let caso = new Boletas()
+console.log(await caso.BuyATicket())
