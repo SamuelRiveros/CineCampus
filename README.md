@@ -16,40 +16,250 @@ Desarrollar una serie de APIs para la aplicación web de CineCampus utilizando M
 
 ### **Requisitos Funcionales**
 
+link : mongodb://mongo:qtdWsTVICWBEJpLOuOGUuIOyABfKmRWB@monorail.proxy.rlwy.net:44466/
+
 1. Selección de Películas:
    - **API para Listar Películas:** Permitir la consulta de todas las películas disponibles en el **catálogo**, con detalles como título, género, duración y horarios de proyección.
+   ```js
+   let caso = new Peliculas()
+   console.log(await caso.listAllMovies())
+   ```
    - **API para Obtener Detalles de Película:** Permitir la consulta de información detallada sobre una película específica, incluyendo sinopsis.
+   ```js
+   const moviedetails = {"titulo" : "Inception"}
 
+   let caso = new Peliculas()
+   console.log(await caso.listSpecificMovieDetails(moviedetails))
+   ```
 2. Compra de Boletos:
    - **API para Comprar Boletos:** Permitir la compra de boletos para una película específica, incluyendo la selección de la fecha y la hora de la proyección.
+   ```js
+   const newTicket = {
+    _id: new ObjectId(),
+    id_cliente: new ObjectId("66ac08be701f366205f09d12"), //*Se crea con la id del cliente, en este caso deducimos que es el cliente que ingresa el dato, pero ingresamos la id para establecerlo como admins
+    tipo_pago: "online",
+    precio: 100,
+    columna: "A",
+    fila: 5, // Tener en cuenta el lugar que se le da a esa persona en la sala
+    sala: 2,
+    id_funcion: new ObjectId("66a595c6f6f7d62733068ac9") //*Indicamos también la id de la funcion, así en el mismo ticket asignamos a que funcion va a ir el cliente
+   }
+
+   let caso = new Boletas()
+   console.log(await caso.BuyATicket(newTicket))
+   await caso.close()
+
+   ```
    - **API para Verificar Disponibilidad de Asientos:** Permitir la consulta de la disponibilidad de asientos en una sala para una proyección específica.
+   ```js
+   let caso2 = new Boletas()
+
+   const funcionId = "66a595c6f6f7d62733068ac9";
+   const sala = 2;
+
+   const asientosDisponibles = await caso2.seatsReview(funcionId, sala);
+
+   console.log(asientosDisponibles)
+   await caso2.close()
+   ```
 
 3. Asignación de Asientos:
    - **API para Reservar Asientos:** Permitir la selección y reserva de asientos para una proyección específica.
+   ```js
+   //* Ya es posible, lo realizamos en el método "BuyATicket", ya que este metodo contiene las propiedades que nos pide la consulta, sin embargo aquí está la query de nuevo:
+   ```
    - **API para Cancelar Reserva de Asientos:** Permitir la cancelación de una reserva de asiento ya realizada.
+   ```js
+   const deleteseat = {"_id" : new ObjectId("66ac72bd6bb58eaebde2ad7e")}
+
+   let caso = new Boletas()
+   console.log(await caso.cancelSeat(deleteseat))
+   await caso.close()
+   ```
 
 4. Descuentos y Tarjetas VIP:
    - **API para Aplicar Descuentos:** Permitir la aplicación de descuentos en la compra de boletos para usuarios con tarjeta VIP.
+   ```js
+   //* Ya tenemos la validacion lista en "BuyATicket", ya que la idea es que cuando se compre el ticket, se le actualice el precio del ticket al usuario si es VIP
+   ```
    - **API para Verificar Tarjeta VIP:** Permitir la verificación de la validez de una tarjeta VIP durante el proceso de compra.
+   ```js
+   //*También está en "BuyaTicket", verificar desde la linea 60 del archivo js/modules/boleta.js
+   ```
 
 5. Roles Definidos:
 
    **Administrador:** Tiene permisos completos para gestionar el sistema, incluyendo la venta de boletos en el lugar físico. Los administradores no están involucrados en las compras en línea realizadas por los usuarios.
 
+   ```js
+   //* Tener en cuenta que todos los roles ya estan creados, sin embargo, dejo el comando para poner en main.js aquí :
+
+   async function createAdministratorRole() {
+      const dbConnection = new connect(); // Instancia de la clase connect
+         try {
+
+            // Ejecuta el comando utilizando this.db.command para crear el rol "administrador"
+            const result = await dbConnection.db.command({
+                  createRole: "administrador",
+                  privileges: [
+                     {
+                        resource: { db: "CineCampus", collection: "" },
+                        actions: [
+                              "find", "remove", "update", "createCollection", 
+                              "createIndex", "dropCollection", "dropIndex", 
+                              "listIndexes", "collStats", "dbStats"
+                        ]
+                     }
+                  ],
+                  roles: ["dbOwner"]
+            });
+
+            console.log("Rol 'administrador' creado correctamente:", result);
+         } catch (error) {
+            console.error("Error al crear el rol 'administrador':", error);
+         } finally {
+            // Cierra la conexión a MongoDB
+            await dbConnection.close();
+            }
+         }
+
+   // Llama a la función para crear el rol
+   createAdministratorRole();
+   ```
+
    **Usuario Estándar:** Puede comprar boletos en línea sin la intervención del administrador.
+   ```js
+   async function createStandardUserRole() {
+      const dbConnection = new connect(); // Instancia de la clase connect
+         try {
+
+            // Ejecuta el comando utilizando this.db.command para crear el rol "administrador"
+            const result = await dbConnection.db.command({
+                  createRole: "usuarioEstandar",
+                  privileges: [
+                     {
+                     resource: { db: "CineCampus", collection: "pelicula" },
+                     actions: [ "find" ]
+                     },
+                     {
+                     resource: { db: "CineCampus", collection: "funcion" },
+                     actions: [ "find" ]
+                     },
+                     {
+                     resource: { db: "CineCampus", collection: "boleta" },
+                     actions: [ "insert", "find", "remove" ]
+                     }
+
+                  ],
+                  roles: ["readWrite"]
+            });
+
+            console.log("Rol 'usuarioEstandar' creado correctamente:", result);
+         } catch (error) {
+            console.error("Error al crear el rol 'usuarioEstandar':", error);
+         } finally {
+            // Cierra la conexión a MongoDB
+            await dbConnection.close();
+            }
+         }
+
+   // Llama a la función para crear el rol
+   createStandardUserRole();
+   ```
 
    **Usuario VIP:** Puede comprar boletos en línea con descuentos aplicables para titulares de tarjetas VIP.
+   ```js
+   async function createVipUserRole() {
+      const dbConnection = new connect(); // Instancia de la clase connect
+         try {
+
+            // Ejecuta el comando utilizando this.db.command para crear el rol "administrador"
+            const result = await dbConnection.db.command({
+                  createRole: "usuarioVip",
+                  privileges: [
+                     {
+                     resource: { db: "CineCampus", collection: "pelicula" },
+                     actions: [ "find" ]
+                     },
+                     {
+                     resource: { db: "CineCampus", collection: "funcion" },
+                     actions: [ "find" ]
+                     },
+                     {
+                     resource: { db: "CineCampus", collection: "boleta" },
+                     actions: [ "insert", "find", "remove" ]
+                     }
+                  ],
+                  roles: ["readWrite"]
+            });
+
+            console.log("Rol 'usuarioVip' creado correctamente:", result);
+         } catch (error) {
+            console.error("Error al crear el rol 'usuarioVip':", error);
+         } finally {
+            // Cierra la conexión a MongoDB
+            await dbConnection.close();
+            }
+         }
+
+   // Llama a la función para crear el rol
+   createVipUserRole();
+   ```
 
    
 
    1. **API para Crear Usuario:** Permitir la creación de nuevos usuarios en el sistema, asignando roles y privilegios específicos (usuario estándar, usuario VIP o administrador).
+
+   ```js
+   const clientData = {
+    _id: new ObjectId("66ac08be701f366205f09d12"),
+    nombre: "Miguel",
+    telefono: 3244717699,
+    email: "miguel.castro@gmail.com",
+    targeta_vip: false,
+    admin : false
+   };
+
+   let caso = new Clientes()
+   console.log(await caso.createClientAndUser(clientData))
+   await caso.close()
+   ```
+
    2. **API para Obtener Detalles de Usuario:** Permitir la consulta de información detallada sobre un usuario, incluyendo su rol y estado de tarjeta VIP.
+   ```js
+   const usuarioid = { _id: new ObjectId("66ac08be701f366205f09d12")}
+
+   let caso = new Clientes()
+   console.log(await caso.findUsuario(usuarioid))
+   ```
    3. **API para Actualizar Rol de Usuario:** Permitir la actualización del rol de un usuario (por ejemplo, cambiar de usuario estándar a VIP, o viceversa).
+
+   ```js
+   const userId = new ObjectId("66ac08be701f366205f09d12");
+   const targetavip = true
+   const isadmin = false
+
+
+   let caso = new Clientes()
+   console.log(await caso.updateuser(userId, targetavip, isadmin))
+   ```
    4. **API para Listar Usuarios:** Permitir la consulta de todos los usuarios del sistema, con la posibilidad de filtrar por rol (VIP, estándar o administrador).
+
+   ```js
+   // adentro del parentesis especificamos que usuario se debería mostrar especificamente, si "usuarioVip", "usuarioEstandar", o "admin" :
+   const caso = new Clientes();
+   console.log(await caso.getUsersByRole("usuarioVip")); 
+   ```
 
 6. Compras en Línea:
    - **API para Procesar Pagos:** Permitir el procesamiento de pagos en línea para la compra de boletos.
+   ```js
+   //Es posible en la compra de una boleta, al comprarla se verifica si el "tipo_pago" es online, o presencial
+   ```
    - **API para Confirmación de Compra:** Enviar confirmación de la compra y los detalles del boleto al usuario.
+   ```js
+   //También se envia la confirmación al comprar el boleto, y se retornan los detalles
+   ```
 
 ### **Requisitos Técnicos**
 
