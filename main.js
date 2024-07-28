@@ -5,16 +5,16 @@ import { Clientes } from "./js/modules/cliente.js";
 import { Boletas } from "./js/modules/boleta.js";
 import { ObjectId } from "mongodb";
 
-// let caso = new Boletas()
-// console.log(await caso.testfunciones())
+let caso = new Boletas()
+console.log(await caso.cancelSeat())
 
 //* Caso de uso 2, usamos parametros para verificar cuantos asientos hay disponibles en una sala especifica
 
-let caso2 = new Boletas()
+// let caso2 = new Boletas()
 
-const funcionId = "66a595c6f6f7d62733068ac9"; // Cambia esto por un ID válido
-const sala = 3;
+// const funcionId = "66a595c6f6f7d62733068ac9"; // Cambia esto por un ID válido
+// const sala = 3;
 
-const asientosDisponibles = await caso2.seatsReview(funcionId, sala);
+// const asientosDisponibles = await caso2.seatsReview(funcionId, sala);
 
-console.log(asientosDisponibles)
+// console.log(asientosDisponibles)
