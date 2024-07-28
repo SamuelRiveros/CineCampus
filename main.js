@@ -5,4 +5,4 @@ import { Clientes } from "./js/modules/cliente.js";
 import { Boletas } from "./js/modules/boleta.js";
 
 let caso = new Peliculas()
-console.log(await caso.listSpecificMovieDetails())
+console.log(await caso.listAllMovies())
