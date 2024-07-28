@@ -70,21 +70,7 @@ export class connect{
             this.conexion = new MongoClient(`${this.getHost}${this.user}:${this.getPass}@${this.getCluster}:${this.port}`)
         }
         await this.conexion.connect();
-        console.log("conectado");
     }
-
-    // para testear la conexion
-
-    // async testConnection() {
-    //     try {
-    //         const result = await this.conexion.db(this.getDbName).admin().ping();
-    //         console.log("Conexión exitosa:", result);
-    //         return result;
-    //     } catch (error) {
-    //         console.error("Error en la conexión:", error);
-    //         throw error;
-    //     }
-    // }
     
     async close(){
         await this.conexion.close();
