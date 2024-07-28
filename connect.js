@@ -75,4 +75,5 @@ export class connect{
     async close(){
         await this.conexion.close();
     }
+
 }
