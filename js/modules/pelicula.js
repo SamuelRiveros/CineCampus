@@ -2,7 +2,6 @@ import { connect } from "../../connect.js";
 import { MongoClient, ObjectId } from "mongodb";
 
 export class Peliculas extends connect {
-    static instance
     constructor() {
         if (typeof Peliculas.instance === "object") {
             return Peliculas.instance;
