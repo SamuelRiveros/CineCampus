@@ -6,7 +6,7 @@ import { Boletas } from "./js/modules/boleta.js";
 import { ObjectId } from "mongodb";
 
 let caso = new Boletas()
-console.log(await caso.cancelSeat())
+console.log(await caso.BuyATicket())
 
 //* Caso de uso 2, usamos parametros para verificar cuantos asientos hay disponibles en una sala especifica
 

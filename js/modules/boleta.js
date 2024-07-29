@@ -9,6 +9,7 @@ export class Boletas extends connect {
         super();
         this.collection = this.db.collection('boleta');
         this.funcionCollection = this.db.collection('funcion');
+        this.clienteColecction = this.db.collection('cliente')
         Boletas.instance = this;
         return this;
     }
@@ -24,34 +25,56 @@ export class Boletas extends connect {
 
     async BuyATicket(){
 
-        const newTicket = {
-            id_cliente: new ObjectId("60c72b2f5f1b2c001c8e4b7a"), //*Se crea con la id del cliente, en este caso deducimos que es el cliente que ingresa el dato, pero ingresamos la id para establecerlo como admins
-            tipo_pago: "online",
-            precio: 100,
-            columna: "A",
-            fila: 5,
-            sala: 3,
-            id_funcion: new ObjectId("66a595c6f6f7d62733068ac9") //*Indicamos también la id de la funcion, así en el mismo ticket asignamos a que funcion va a ir el cliente
-        }
+        try {
+            const newTicket = {
+                id_cliente: new ObjectId("66a5ad90f6f7d62733068acc"), //*Se crea con la id del cliente, en este caso deducimos que es el cliente que ingresa el dato, pero ingresamos la id para establecerlo como admins
+                tipo_pago: "online",
+                precio: 100,
+                columna: "A",
+                fila: 5, // Tener en cuenta el lugar que se le da a esa persona en la sala
+                sala: 2,
+                id_funcion: new ObjectId("66a595c6f6f7d62733068ac9") //*Indicamos también la id de la funcion, así en el mismo ticket asignamos a que funcion va a ir el cliente
+            }
+    
+            //* Validación, si el ticket con los datos que se ingresan ya existe, no lo ingresa y nos retorna un "ya existe el ticket"
 
-        //!Validación, si el ticket con los datos que se ingresan ya existe, no lo ingresa y nos retorna un "ya existe el ticket"
-        const existingTicket = await this.collection.findOne({
-            id_cliente: newTicket.id_cliente,
-            columna: newTicket.columna,
-            fila: newTicket.fila,
-            sala: newTicket.sala,
-            id_funcion: newTicket.id_funcion
-        });
+            const existingTicket = await this.collection.findOne({
+                id_cliente: newTicket.id_cliente,
+                columna: newTicket.columna,
+                fila: newTicket.fila,
+                sala: newTicket.sala,
+                id_funcion: newTicket.id_funcion
+            });
+    
+            if (existingTicket) {
+                console.log("Ya existe el ticket, es el siguiente :")
+                return existingTicket;
+            }
+            
+            //! Aqui validamos si el usuario es vip o no, y se le inserta una oferta al precio si lo es, si no lo es, nos dice que no es vip
 
-        if (existingTicket) {
-            console.log("Ya existe el ticket")
-        }
-
-        //* si todo sale bien se inserta el documento correctamente
-        let res = await this.collection.insertOne(newTicket)
-        console.log("Insertado Correctamente")
-        return res;
+            const usuariocheck = await this.clienteColecction.findOne({
+                _id: newTicket.id_cliente
+            });
+    
+            if (usuariocheck.targeta_vip === true) {
+                console.log("Es vip, se le asigna la oferta del 50% !")
+                newTicket.precio *= 0.5
+    
+            } else if(usuariocheck.targeta_vip === false) {
+                console.log("No es vip, no se le da una oferta")
+            }
+            //* si todo sale bien se inserta el documento correctamente
+            let res = await this.collection.insertOne(newTicket)
+    
+            
+            console.log("Insertado Correctamente")
+            return res;
+        } catch(error){
+            console.log(`error al comprar ticket: ${error}`)
+        } finally { await this.close() }
     }
+
 
     //API para Verificar Disponibilidad de Asientos: Permitir la consulta de la disponibilidad de asientos en una sala para una proyección específica.
 
@@ -61,6 +84,7 @@ export class Boletas extends connect {
      * *Establecemos los parametros para que puedan ser tratados dentro del método, y llamados en main.js
      * @returns La lista de asientos libres y ocupados por la sala que pedimos en main.js
      */
+    
     async seatsReview(funcionId, sala) {
         try {
             //* Buscamos la función por ID
@@ -156,4 +180,14 @@ export class Boletas extends connect {
             await this.conexion.close()
         }
     }
+
+    // ----------- Descuentos y Tarjetas VIP, Caso de uso #4 ----------- //
+
+    //API para Aplicar Descuentos: Permitir la aplicación de descuentos en la compra de boletos para usuarios con tarjeta VIP.
+
+    //* Ya tenemos la validacion lista en "BuyATicket", ya que la idea es que cuando se compre el ticket, se le actualice el precio del ticket
+
+    //API para Verificar Tarjeta VIP: Permitir la verificación de la validez de una tarjeta VIP durante el proceso de compra.
+
+    //*También está en "BuyaTicket", verificar desde la linea 60
 }
