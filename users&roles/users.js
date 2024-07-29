@@ -1,4 +1,4 @@
-import { connect } from "./connect.js";
+import { connect } from "../connect.js";
 import { ObjectId } from "mongodb";
 
 // Crear usuario "usuario"
@@ -11,7 +11,7 @@ export class CreacionUsuario extends connect {
     }
     
     async crearUsuario(){
-        
+
         const usuarioRole = {
             role: "usuarioEstandar",
             privileges : [
@@ -20,7 +20,7 @@ export class CreacionUsuario extends connect {
                     actions: ["find", "insert", "update", "delete"]
                 }
             ],
-            roles : []
+            roles   : []
             
         };
         

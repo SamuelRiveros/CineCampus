@@ -1,5 +1,4 @@
 import { connect } from "../../connect.js";
-import { ObjectId } from "mongodb";
 
 export class Clientes extends connect {
     constructor() {
@@ -10,5 +9,12 @@ export class Clientes extends connect {
         this.collection = this.db.collection('cliente');
         Clientes.instance = this;
         return this;
+    }
+
+
+    async createUser() {
+        let res = await this.collection.createClienteAndUser(
+            
+        );
     }
 }

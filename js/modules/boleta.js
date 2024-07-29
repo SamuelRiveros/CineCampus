@@ -91,7 +91,7 @@ export class Boletas extends connect {
             const funcion = await this.funcionCollection.findOne({
                 _id: new ObjectId(funcionId)
             });
-
+            
             //!Si no encuentra la funcion especificada (En main.js) nos loggea esto en consola :
 
             if (!funcion) {
