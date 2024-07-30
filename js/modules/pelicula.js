@@ -1,4 +1,4 @@
-import { connect } from "../../connect.js";
+import { connect } from "../../helper/db/connect.js";
 import { MongoClient, ObjectId } from "mongodb";
 
 export class Peliculas extends connect {

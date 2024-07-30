@@ -1,4 +1,4 @@
-import { connect } from "../../connect.js";
+import { connect } from "../../helper/db/connect.js";
 import { ObjectId } from "mongodb";
 
 export class Boletas extends connect {

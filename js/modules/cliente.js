@@ -1,4 +1,4 @@
-import { connect } from "../../connect.js";
+import { connect } from "../../helper/db/connect.js";
 
 export class Clientes extends connect {
     constructor() {
