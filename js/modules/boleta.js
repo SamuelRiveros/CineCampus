@@ -1,4 +1,4 @@
-import { connect } from "../../connect.js";
+import { connect } from "../../helper/db/connect.js";
 import { ObjectId } from "mongodb";
 
 export class Boletas extends connect {
@@ -19,8 +19,14 @@ export class Boletas extends connect {
     //API para Comprar Boletos: Permitir la compra de boletos para una película específica, incluyendo la selección de la fecha y la hora de la proyección.
 
     /**
+     * @async
      * *Creamos el ticket como usuarios con los datos especificos, este ticket crea un documento en la coleccion "boleta"
      * *También establecemos la fila, la columna, la sala y demás datos para tenerlo listo en el ticket
+     * @returns {Promise<Object|String>} - Retorna el resultado de la inserción del ticket en la base de datos.
+     *   - Si el ticket ya existe, retorna el ticket existente.
+     *   - Si el ticket se inserta correctamente, retorna el resultado de la operación `insertOne`.
+     *   - Si ocurre un error, no retorna un valor específico, pero se imprime un mensaje de error en la consola.
+     * @throws {error} - nos devuelve error en caso de que no se pueda comprar el ticket por alguna razón
      */
 
     async BuyATicket(){
@@ -80,7 +86,7 @@ export class Boletas extends connect {
 
     /**
      * @param {ObjectId} funcionId 
-     * @param {int} sala 
+     * @param {number} sala
      * *Establecemos los parametros para que puedan ser tratados dentro del método, y llamados en main.js
      * @returns La lista de asientos libres y ocupados por la sala que pedimos en main.js
      */
@@ -147,18 +153,6 @@ export class Boletas extends connect {
         }
     }
     
-
-    /**
-     * *Solo un testeo de que la llamada de las funciones están funcionando
-     * @returns todos los documentos de las funciones que hay en la coleccion "funcion"
-     */
-
-    async testfunciones(){
-        let res = await this.funcionCollection.find({}).toArray()
-        await this.close()
-        return res;
-    } 
-    
     // ----------- Asignación de Asientos, Caso de uso #3 ----------- //
     
     //API para Reservar Asientos: Permitir la selección y reserva de asientos para una proyección específica.
@@ -169,6 +163,11 @@ export class Boletas extends connect {
 
     //* Sabemos que, al cancelar un asiento basicamente cancelamos la ida a la función, por lo tanto podemos eliminar el boleto ingresado, no hay boleto sin un asiento reservado, es lo normal en un cine ( no nos vamos a sentar en el piso 🥵)
 
+    /**
+     * @async
+     * @returns {object} el documento eliminado que en este caso sería el asiento
+     * @throws {error} en caso de que no funcione la cancelacion de asiento
+     */
     async cancelSeat(){
         try {
             let res = await this.collection.deleteOne({"_id" : new ObjectId("66a5b4ed51b8bc807e8a6b5a")})
