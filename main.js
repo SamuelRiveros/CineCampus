@@ -6,8 +6,8 @@ import { Boletas } from "./js/modules/boleta.js";
 import { ObjectId } from "mongodb";
 import { CreacionUsuario } from "./users&roles/users.js";
 
-// let caso = new Boletas()
-// console.log(await caso.seatsReview())
+let caso = new Clientes()
+console.log(await caso.createClientAndUser())
 
 //* Caso de uso 2, usamos parametros para verificar cuantos asientos hay disponibles en una sala especifica
 
@@ -20,7 +20,7 @@ import { CreacionUsuario } from "./users&roles/users.js";
 
 // console.log(asientosDisponibles)
 
-//* Ejecutamos la creacion de roles, ya están creados en la db
+//* Estos roles ya están en la db, sin embargo dejo los comandos para saber como se crearon
 /*
 db.createRole({
     role: "administrador",
@@ -73,4 +73,4 @@ db.createRole({
 });
   */
  
-  // si el usuario al ingresarse contiene el rol de user_vip, targeta_vip será true, else false 
+  // si el usuario al ingresarse tiene targeta_vip como true, se le dará el rol de user_vip
