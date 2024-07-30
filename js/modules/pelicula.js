@@ -18,8 +18,15 @@ export class Peliculas extends connect {
     // API para Listar Películas: Permitir la consulta de todas las películas disponibles en el catálogo, con detalles como título, género, duración y horarios de proyección.
 
     /**
-     * @returns Aboslutamente todas las peliculas que hay en la coleccion de peliculas junto a sus detalles
      * *Usamos Aggregate para proyectar los datos de la coleccion de peliculas, más las funciones que contiene de la coleccion de funciones, en base a su id que conectamos
+     * @async
+     * @returns {Promise<Object[]>} Una promesa que resuelve a un array de objetos, donde cada objeto representa una película con sus datos.
+     * 
+     * @typedef {Object} peliculascatalogo
+     * @property {string} titulo - El título de la película.
+     * @property {string} genero - El género de la película.
+     * @property {number} duracion - La duración de la película en minutos.
+     * @property {string[]} funciones - Un array de horarios de proyección de la película.
      */
 
     async listAllMovies() {
@@ -51,7 +58,9 @@ export class Peliculas extends connect {
     // API para Obtener Detalles de Película: Permitir la consulta de información detallada sobre una película específica, incluyendo sinopsis.
 
     /**
-     * @returns especificamente la pelicula "Inception" junto a sus datos detallados
+     * @async
+     * *nos devuelve todos los detalles de una pelicula, en este caso "Inception"
+     * @returns {Object} especificamente la pelicula "Inception" junto a sus datos detallados
      */
     async listSpecificMovieDetails() {
         let res = await this.collection.findOne({"titulo" : "Inception"})

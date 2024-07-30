@@ -6,8 +6,12 @@ import { Boletas } from "./js/modules/boleta.js";
 import { ObjectId } from "mongodb";
 import { CreacionUsuario } from "./users&roles/users.js";
 
-let caso = new Clientes()
-console.log(await caso.createClientAndUser())
+// let caso = new Clientes()
+// console.log(await caso.createClientAndUser())
+
+// errores como obj son :
+
+// return {error: "el skakdasdllas"}
 
 //* Caso de uso 2, usamos parametros para verificar cuantos asientos hay disponibles en una sala especifica
 

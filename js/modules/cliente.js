@@ -11,6 +11,12 @@ export class Clientes extends connect {
         return this;
     }
 
+    /**
+     * *usamos math.random para generar un password al azar con las letras que se encuentran dentro de charset
+     * @param {number} length longitud deseada de la contraseña
+     * @returns {string} la contraseña que se genera
+     */
+
     generateRandomPassword(length) {
         const charset = "abcdefg";
         let password = "";
@@ -21,7 +27,12 @@ export class Clientes extends connect {
         return password;
     }
 
-    async createClientAndUser() { 
+    /**
+     * *Creamos el cliente y el usuario de forma respectiva
+     * @returns {object} el cliente ingresado, si no tenemos errores no nos envía nada
+     */
+
+    async createClientAndUser() {
         try {
             const clientData = {
                 nombre: "Miguel Castro",
@@ -47,6 +58,7 @@ export class Clientes extends connect {
             
             // Creación del usuario
             const password = this.generateRandomPassword(8); // Contraseña de 8 caracteres
+            //*Esto es un ternario , un if acortado, si targeta vip es true, se le asigna a la variable rol "usuarioVip" , si es false, será "usuarioEstandar"
             const rol = clientData.targeta_vip ? "usuarioVip" : "usuarioEstandar";
 
             await this.db.command({
@@ -64,5 +76,4 @@ export class Clientes extends connect {
             await this.close();
         }
     }
-
-    }
+}
