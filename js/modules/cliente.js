@@ -36,6 +36,7 @@ export class Clientes extends connect {
     async createClientAndUser() {
         try {
             const clientData = {
+                _id: new ObjectId("66aa7ac9d3c62f8e7866024c"),
                 nombre: "Miguel Castro",
                 telefono: 3234515699,
                 email: "miguel.castro@gmail.com",
@@ -71,18 +72,45 @@ export class Clientes extends connect {
             });
 
             console.log(`Usuario creado. Contraseña del usuario: ${password}`);
+            return "";
         } catch (error) {
             console.log(`Error al insertar cliente: ${error}`);
         } finally {
-            // await this.close();
+            await this.close();
         }
     }
     
     //2. **API para Obtener Detalles de Usuario:** Permitir la consulta de información detallada sobre un usuario, incluyendo su rol y estado de tarjeta VIP.
     async findUsuario() {
-        let res = this.collection.findOne({ _id: new ObjectId("66a5ad90f6f7d62733068acc")})
-        return res;
+        try {
+            // Conectar a la base de datos admin
+            const adminDb = this.db.admin(); // Obtén la instancia de la base de datos admin
+    
+            // Ejecuta el comando para obtener la información del usuario
+            const user = await adminDb.command({ 
+                usersInfo: { user: "miguel.castro@gmail.com", db: "CineCampus" } // Reemplaza "nombreuser" con el nombre del usuario y ajusta la base de datos si es necesario
+            });
+
+            let res = this.collection.findOne({ _id: new ObjectId("66a5ad90f6f7d62733068acc")})
+    
+            if (user && user.users && user.users.length > 0) {
+                const userInfo = user.users[0]; // Suponiendo que devuelve un array de usuarios, selecciona el primer resultado
+                console.log(`Información del usuario ${userInfo.user}:`);
+                console.log(`Roles: ${JSON.stringify(userInfo.roles, null, 2)}`);
+            } else {
+                console.log("No existe un usuario con el nombre proporcionado");
+            }
+
+            return res;
+
+
+        } catch (error) {
+            console.log("Error al encontrar usuario:", error);
+        } finally {
+            // await this.close() // Descomenta si necesitas cerrar la conexión aquí
+        }
     }
+    
     
     
     //3. **API para Actualizar Rol de Usuario:** Permitir la actualización del rol de un usuario (por ejemplo, cambiar de usuario estándar a VIP, o viceversa).
@@ -95,24 +123,23 @@ export class Clientes extends connect {
 
     //aqui actualizo un usuario ya que mi logica es que cuando cambie la targeta vip, se le actualice el user que también 
     async updateuser() {
-
-        const userId = new ObjectId("66a92fc7442bab0f92f553fc")
-
+        const userId = new ObjectId("66aa7ac9d3c62f8e7866024c");
+    
         try {
-            
+            // Intentamos actualizar el usuario
             let res = await this.collection.updateOne(
-                { _id: userId},
+                { _id: userId },
                 {
-                    $set :{
-                        targeta_vip : true
+                    $set: {
+                        targeta_vip: false
                     }
                 }
-            )
+            );
     
-            const user = await this.collection.findOne({_id: userId})
-
-            if(user){
-
+            // Verificamos si el usuario fue actualizado
+            const user = await this.collection.findOne({ _id: userId });
+    
+            if (user) {
                 const rol = user.targeta_vip ? "usuarioVip" : "usuarioEstandar";
                 await this.db.command({
                     updateUser: user.email,
@@ -120,18 +147,21 @@ export class Clientes extends connect {
                         { role: rol, db: "CineCampus" }
                     ]
                 });
-        
-                console.log(`El rol del usuario ${user.email} ha sido actualizado a ${rol}`);
-            }
     
-
-        } catch(error) {
-            console.log (`error al actualizar usuario: ${error}`);
+                console.log(`El rol del usuario ${user.email} ha sido actualizado a ${rol} ya que ahora no tiene targeta vip`);
+                return "";
+            } else {
+                //! validacion, Si el usuario no existe, muestra un mensaje de error
+                console.log(`Error: No existe un usuario con el _id ${userId}`);
+                return "";
+            }
+        } catch (error) {
+            console.log(`Error al actualizar usuario: ${error}`);
         } finally { 
             // await this.close()
         }
-        
     }
+    
 
     //AQUI ESTA LA CONSULTA DE FILTRAR O TODOS, O POR ROL DE MONGODB DE USUARIOVIP O DE USUARIOESTANDAR O DE ADMIN
 
@@ -141,7 +171,7 @@ export class Clientes extends connect {
             const db = this.db;
             const result = await db.command({ usersInfo: 1 });
     
-            console.log('Resultado del comando usersInfo:', result);
+            // console.log('Resultado del comando usersInfo:', result);
     
             // Verificar si hay usuarios en el resultado
             if (!result.users || result.users.length === 0) {
@@ -155,10 +185,15 @@ export class Clientes extends connect {
                     user.roles.some(r => r.role === role)
                 )
                 :result.users; // Si no se especifica rol, devolver todos los usuarios
-    
-            // Filtrar usuarios con rol "usuarioVip"
-            console.log(`Usuarios con rol " ${role} " encontrados:`);
-            return filteredUsers;
+
+                if (role === null) {
+                    console.log("Todos los usuarios:")
+                    return filteredUsers;
+                } else {
+                    console.log(`Usuarios con rol " ${role} " encontrados:`);
+                    return filteredUsers;
+
+                }
 
         } catch (err) {
             console.error('Error al obtener usuarios:', err);
