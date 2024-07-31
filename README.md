@@ -190,13 +190,39 @@ Desarrollar una serie de APIs para la aplicación web de CineCampus utilizando M
    
 
    1. **API para Crear Usuario:** Permitir la creación de nuevos usuarios en el sistema, asignando roles y privilegios específicos (usuario estándar, usuario VIP o administrador).
+
+   ```js
+   let caso = new Clientes()
+   console.log(await caso.createClientAndUser())
+   ```
+
    2. **API para Obtener Detalles de Usuario:** Permitir la consulta de información detallada sobre un usuario, incluyendo su rol y estado de tarjeta VIP.
+   ```js
+   let caso = new Clientes()
+   console.log(await caso.findUsuario())
+   ```
    3. **API para Actualizar Rol de Usuario:** Permitir la actualización del rol de un usuario (por ejemplo, cambiar de usuario estándar a VIP, o viceversa).
+
+   ```js
+   let caso = new Clientes()
+   console.log(await caso.updateuser())
+   ```
    4. **API para Listar Usuarios:** Permitir la consulta de todos los usuarios del sistema, con la posibilidad de filtrar por rol (VIP, estándar o administrador).
+
+   ```js
+   const caso = new Clientes();
+   console.log(await caso.getUsersByRole("usuarioVip")); 
+   ```
 
 6. Compras en Línea:
    - **API para Procesar Pagos:** Permitir el procesamiento de pagos en línea para la compra de boletos.
+   ```js
+   //Es posible en la compra de una boleta, al comprarla se verifica si el "tipo_pago" es online, o presencial
+   ```
    - **API para Confirmación de Compra:** Enviar confirmación de la compra y los detalles del boleto al usuario.
+   ```js
+   //También se envia la confirmación al comprar el boleto, y se retornan los detalles
+   ```
 
 ### **Requisitos Técnicos**
 
