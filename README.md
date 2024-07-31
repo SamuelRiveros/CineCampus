@@ -210,6 +210,7 @@ Desarrollar una serie de APIs para la aplicación web de CineCampus utilizando M
    4. **API para Listar Usuarios:** Permitir la consulta de todos los usuarios del sistema, con la posibilidad de filtrar por rol (VIP, estándar o administrador).
 
    ```js
+   // adentro del parentesis especificamos que usuario se debería mostrar especificamente, si "usuarioVip", "usuarioEstandar", o "admin" :
    const caso = new Clientes();
    console.log(await caso.getUsersByRole("usuarioVip")); 
    ```

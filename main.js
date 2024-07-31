@@ -4,4 +4,3 @@ import { Funciones } from "./js/modules/funcion.js";
 import { Clientes } from "./js/modules/cliente.js";
 import { Boletas } from "./js/modules/boleta.js";
 import { ObjectId } from "mongodb";
-

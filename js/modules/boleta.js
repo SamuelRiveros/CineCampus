@@ -33,6 +33,7 @@ export class Boletas extends connect {
 
         try {
             const newTicket = {
+                _id: new ObjectId("66aa73d1c5561288e0bacb87"),
                 id_cliente: new ObjectId("66a5ad90f6f7d62733068acc"), //*Se crea con la id del cliente, en este caso deducimos que es el cliente que ingresa el dato, pero ingresamos la id para establecerlo como admins
                 tipo_pago: "online",
                 precio: 100,
@@ -78,7 +79,7 @@ export class Boletas extends connect {
             return res;
         } catch(error){
             console.log(`error al comprar ticket: ${error}`)
-        } finally { await this.close() }
+        } finally { this.close() }
     }
 
 
@@ -170,13 +171,13 @@ export class Boletas extends connect {
      */
     async cancelSeat(){
         try {
-            let res = await this.collection.deleteOne({"_id" : new ObjectId("66a5b4ed51b8bc807e8a6b5a")})
+            let res = await this.collection.deleteOne({"_id" : new ObjectId("66aa73d1c5561288e0bacb87")})
             console.log("Reserva eliminada correctamente")
             return res;
         } catch(error) {
             console.log("Error al cancelar asiento:", error);
         } finally {
-            await this.conexion.close()
+            this.conexion.close()
         }
     }
 
