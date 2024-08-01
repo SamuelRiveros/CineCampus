@@ -33,21 +33,17 @@ export class Clientes extends connect {
      * @returns {object} el cliente ingresado, si no tenemos errores no nos envía nada
      */
 
-    async createClientAndUser() {
+    async createClientAndUser(clientData) {
         try {
-            const clientData = {
-                _id: new ObjectId("66aa7ac9d3c62f8e7866024c"),
-                nombre: "Miguel Castro",
-                telefono: 3234515699,
-                email: "miguel.castro@gmail.com",
-                targeta_vip: true
-            };
+            
+            const rol = clientData.targeta_vip ? "usuarioVip" : "usuarioEstandar";
 
             const existingCliente = await this.collection.findOne({
                 nombre: clientData.nombre,
                 telefono: clientData.telefono,
                 email: clientData.email,
-                targeta_vip: clientData.targeta_vip
+                targeta_vip: clientData.targeta_vip,
+                rol: clientData.rol
             });
 
             if (existingCliente) {
@@ -61,13 +57,28 @@ export class Clientes extends connect {
             // Creación del usuario
             const password = this.generateRandomPassword(8); // Contraseña de 8 caracteres
             //*Esto es un ternario , un if acortado, si targeta vip es true, se le asigna a la variable rol "usuarioVip" , si es false, será "usuarioEstandar"
-            const rol = clientData.targeta_vip ? "usuarioVip" : "usuarioEstandar";
+
+
+            if (clientData.admin === true){
+                console.log("ES ADMIN WOHOOO")
+                await this.db.command({
+                    createUser: clientData.nombre,
+                    pwd: password,
+                    roles: [
+                      { role: "administrador", db: "CineCampus" },
+                      { role : "readWrite", db: "CineCampus"}
+                    ]
+                });
+                console.log(`Usuario creado. Contraseña del usuario: ${password}`);
+                return clientData;
+            }
 
             await this.db.command({
-                createUser: clientData.email,
+                createUser: clientData.nombre,
                 pwd: password,
                 roles: [
-                  { role: rol, db: "CineCampus" }
+                  { role: rol, db: "CineCampus" },
+                  { role : "readWrite", db: "CineCampus"}
                 ]
             });
 
@@ -88,10 +99,10 @@ export class Clientes extends connect {
     
             // Ejecuta el comando para obtener la información del usuario
             const user = await adminDb.command({ 
-                usersInfo: { user: "miguel.castro@gmail.com", db: "CineCampus" } // Reemplaza "nombreuser" con el nombre del usuario y ajusta la base de datos si es necesario
+                usersInfo: { user: "Juan", db: "CineCampus" } // Reemplaza "nombreuser" con el nombre del usuario y ajusta la base de datos si es necesario
             });
 
-            let res = this.collection.findOne({ _id: new ObjectId("66a5ad90f6f7d62733068acc")})
+            let res = this.collection.findOne({ _id: new ObjectId("66ac08be701f366205f09d12")})
     
             if (user && user.users && user.users.length > 0) {
                 const userInfo = user.users[0]; // Suponiendo que devuelve un array de usuarios, selecciona el primer resultado

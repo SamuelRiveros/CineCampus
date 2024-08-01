@@ -16,6 +16,8 @@ Desarrollar una serie de APIs para la aplicación web de CineCampus utilizando M
 
 ### **Requisitos Funcionales**
 
+link : mongodb://mongo:qtdWsTVICWBEJpLOuOGUuIOyABfKmRWB@monorail.proxy.rlwy.net:44466/
+
 1. Selección de Películas:
    - **API para Listar Películas:** Permitir la consulta de todas las películas disponibles en el **catálogo**, con detalles como título, género, duración y horarios de proyección.
    ```js
@@ -93,7 +95,7 @@ Desarrollar una serie de APIs para la aplicación web de CineCampus utilizando M
                         ]
                      }
                   ],
-                  roles: []
+                  roles: ["dbOwner"]
             });
 
             console.log("Rol 'administrador' creado correctamente:", result);
@@ -131,8 +133,9 @@ Desarrollar una serie de APIs para la aplicación web de CineCampus utilizando M
                      resource: { db: "CineCampus", collection: "boleta" },
                      actions: [ "insert", "find", "remove" ]
                      }
+
                   ],
-                  roles: []
+                  roles: ["readWrite"]
             });
 
             console.log("Rol 'usuarioEstandar' creado correctamente:", result);
@@ -171,7 +174,7 @@ Desarrollar una serie de APIs para la aplicación web de CineCampus utilizando M
                      actions: [ "insert", "find", "remove" ]
                      }
                   ],
-                  roles: []
+                  roles: ["readWrite"]
             });
 
             console.log("Rol 'usuarioVip' creado correctamente:", result);
@@ -192,8 +195,18 @@ Desarrollar una serie de APIs para la aplicación web de CineCampus utilizando M
    1. **API para Crear Usuario:** Permitir la creación de nuevos usuarios en el sistema, asignando roles y privilegios específicos (usuario estándar, usuario VIP o administrador).
 
    ```js
+   const clientData = {
+    _id: new ObjectId("66ac08be701f366205f09d12"),
+    nombre: "JuanAdmin",
+    telefono: 3244717699,
+    email: "juan.castro@gmail.com",
+    targeta_vip: true,
+    admin : true
+   };
+
+
    let caso = new Clientes()
-   console.log(await caso.createClientAndUser())
+   console.log(await caso.createClientAndUser(clientData))
    ```
 
    2. **API para Obtener Detalles de Usuario:** Permitir la consulta de información detallada sobre un usuario, incluyendo su rol y estado de tarjeta VIP.

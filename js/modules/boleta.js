@@ -34,7 +34,7 @@ export class Boletas extends connect {
         try {
             const newTicket = {
                 _id: new ObjectId("66aa73d1c5561288e0bacb87"),
-                id_cliente: new ObjectId("66a5ad90f6f7d62733068acc"), //*Se crea con la id del cliente, en este caso deducimos que es el cliente que ingresa el dato, pero ingresamos la id para establecerlo como admins
+                id_cliente: new ObjectId("66ac08be701f366205f09d12"), //*Se crea con la id del cliente, en este caso deducimos que es el cliente que ingresa el dato, pero ingresamos la id para establecerlo como admins
                 tipo_pago: "online",
                 precio: 100,
                 columna: "A",
