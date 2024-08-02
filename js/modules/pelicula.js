@@ -62,8 +62,8 @@ export class Peliculas extends connect {
      * *nos devuelve todos los detalles de una pelicula, en este caso "Inception"
      * @returns {Object} especificamente la pelicula "Inception" junto a sus datos detallados
      */
-    async listSpecificMovieDetails() {
-        let res = await this.collection.findOne({"titulo" : "Inception"})
+    async listSpecificMovieDetails(moviedetails) {
+        let res = await this.collection.findOne(moviedetails)
         return res;
     }
 }

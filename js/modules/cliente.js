@@ -65,7 +65,7 @@ export class Clientes extends connect {
                     createUser: clientData.nombre,
                     pwd: password,
                     roles: [
-                      { role: "administrador", db: "CineCampus" },
+                      { role: "administrador", db: "admin" },
                       { role : "readWrite", db: "CineCampus"}
                     ]
                 });
@@ -92,17 +92,17 @@ export class Clientes extends connect {
     }
     
     //2. **API para Obtener Detalles de Usuario:** Permitir la consulta de información detallada sobre un usuario, incluyendo su rol y estado de tarjeta VIP.
-    async findUsuario() {
+    async findUsuario(usuarioid) {
         try {
             // Conectar a la base de datos admin
-            const adminDb = this.db.admin(); // Obtén la instancia de la base de datos admin
+            const adminDb = this.db; // Obtén la instancia de la base de datos admin
     
             // Ejecuta el comando para obtener la información del usuario
             const user = await adminDb.command({ 
-                usersInfo: { user: "Juan", db: "CineCampus" } // Reemplaza "nombreuser" con el nombre del usuario y ajusta la base de datos si es necesario
+                usersInfo: { user: "Karen", db: "CineCampus" } // Reemplaza "nombreuser" con el nombre del usuario y ajusta la base de datos si es necesario
             });
 
-            let res = this.collection.findOne({ _id: new ObjectId("66ac08be701f366205f09d12")})
+            let res = this.collection.findOne(usuarioid)
     
             if (user && user.users && user.users.length > 0) {
                 const userInfo = user.users[0]; // Suponiendo que devuelve un array de usuarios, selecciona el primer resultado
@@ -110,9 +110,8 @@ export class Clientes extends connect {
                 console.log(`Roles: ${JSON.stringify(userInfo.roles, null, 2)}`);
             } else {
                 console.log("No existe un usuario con el nombre proporcionado");
+                return "";
             }
-
-            return res;
 
 
         } catch (error) {
@@ -133,8 +132,7 @@ export class Clientes extends connect {
      */
 
     //aqui actualizo un usuario ya que mi logica es que cuando cambie la targeta vip, se le actualice el user que también 
-    async updateuser() {
-        const userId = new ObjectId("66aa7ac9d3c62f8e7866024c");
+    async updateuser(userId, targetavip, isadmin) {
     
         try {
             // Intentamos actualizar el usuario
@@ -142,7 +140,7 @@ export class Clientes extends connect {
                 { _id: userId },
                 {
                     $set: {
-                        targeta_vip: false
+                        targeta_vip: targetavip
                     }
                 }
             );
@@ -153,13 +151,24 @@ export class Clientes extends connect {
             if (user) {
                 const rol = user.targeta_vip ? "usuarioVip" : "usuarioEstandar";
                 await this.db.command({
-                    updateUser: user.email,
+                    updateUser: user.nombre,
                     roles: [
                         { role: rol, db: "CineCampus" }
                     ]
                 });
+
+                if (isadmin) {
+                    await this.db.command({
+                        updateUser: user.nombre,
+                        roles: [
+                            { role: "administrador", db: "admin" }
+                        ]
+                    });
+                    console.log(`El rol del usuario ${user.nombre} ha sido actualizado a administrador`);
+                    return user;
+                }
     
-                console.log(`El rol del usuario ${user.email} ha sido actualizado a ${rol} ya que ahora no tiene targeta vip`);
+                console.log(`El rol del usuario ${user.nombre} ha sido actualizado a ${rol}`);
                 return "";
             } else {
                 //! validacion, Si el usuario no existe, muestra un mensaje de error
