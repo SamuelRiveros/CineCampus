@@ -29,19 +29,9 @@ export class Boletas extends connect {
      * @throws {error} - nos devuelve error en caso de que no se pueda comprar el ticket por alguna razón
      */
 
-    async BuyATicket(){
+    async BuyATicket(newTicket){
 
         try {
-            const newTicket = {
-                _id: new ObjectId("66aa73d1c5561288e0bacb87"),
-                id_cliente: new ObjectId("66a5ad90f6f7d62733068acc"), //*Se crea con la id del cliente, en este caso deducimos que es el cliente que ingresa el dato, pero ingresamos la id para establecerlo como admins
-                tipo_pago: "online",
-                precio: 100,
-                columna: "A",
-                fila: 5, // Tener en cuenta el lugar que se le da a esa persona en la sala
-                sala: 2,
-                id_funcion: new ObjectId("66a595c6f6f7d62733068ac9") //*Indicamos también la id de la funcion, así en el mismo ticket asignamos a que funcion va a ir el cliente
-            }
     
             //* Validación, si el ticket con los datos que se ingresan ya existe, no lo ingresa y nos retorna un "ya existe el ticket"
 
@@ -79,14 +69,14 @@ export class Boletas extends connect {
             return res;
         } catch(error){
             console.log(`error al comprar ticket: ${error}`)
-        } finally { this.close() }
+        }
     }
 
 
     //API para Verificar Disponibilidad de Asientos: Permitir la consulta de la disponibilidad de asientos en una sala para una proyección específica.
 
     /**
-     * @param {ObjectId} funcionId 
+     * @param {ObjectId} funcionId
      * @param {number} sala
      * *Establecemos los parametros para que puedan ser tratados dentro del método, y llamados en main.js
      * @returns La lista de asientos libres y ocupados por la sala que pedimos en main.js
@@ -94,65 +84,62 @@ export class Boletas extends connect {
     
     async seatsReview(funcionId, sala) {
         try {
-            //* Buscamos la función por ID
+            // Buscar la función por ID
             const funcion = await this.funcionCollection.findOne({
                 _id: new ObjectId(funcionId)
             });
-            
-            //!Si no encuentra la funcion especificada (En main.js) nos loggea esto en consola :
-
+    
+            // Si no encuentra la función especificada
             if (!funcion) {
                 console.log('No se encontró la función especificada');
                 return;
             }
-
-            //* Buscamos las boletas asociadas a la función y sala
-            //* Tenemos en cuenta que el "id_funcion" tiene que ser el mismo que el _id del documento de la coleccion de función , lo ponemos así por que se refiere a la "funcionID" que ponemos en el main.js , y tiene que estar así en el documento por que de lo contrario no lo encontraría
-
+    
+            // Buscar las boletas asociadas a la función y sala
             const boletas = await this.collection.find({
                 id_funcion: funcion._id,
                 sala: sala
             }).toArray();
-
-            //* Configuramos la cantidad de filas y columnas
-            //! Tenemos un minimo de 0 y un maximo de 10 filas en mongo, si agregamos más filas nos retorna error
-
+    
+            // Configurar la cantidad de filas y columnas
             const totalFilas = 10;
             const totalColumnas = 26;
             const asientos = Array.from({ length: totalFilas }, () => Array(totalColumnas).fill(0));
-
-            //* Función para convertir columna de letra a índice numérico
-            //* Manejamos indices numericos para que el codigo reconozca las letras como numeros, ya que estamos manejando las columnas como letras
-
+    
+            // Función para convertir columna de letra a índice numérico
             function columnaAIndice(columna) {
-                return columna.charCodeAt(0) - 65; //* 'A' tiene el valor 65 en ASCII
+                return columna.charCodeAt(0) - 65; // 'A' tiene el valor 65 en ASCII
             }
-
-            //* Marcar los asientos ocupados
+    
+            // Marcamos los asientos ocupados
             boletas.forEach(boleta => {
                 const { fila, columna } = boleta;
+                const filaIndex = fila - 1; // Convertir fila a índice basado en 0
                 const columnaIndex = columnaAIndice(columna);
-                if (fila < totalFilas && columnaIndex < totalColumnas) {
-                    asientos[fila][columnaIndex] = 1;
+                if (filaIndex < totalFilas && columnaIndex < totalColumnas) {
+                    asientos[filaIndex][columnaIndex] = 1;
                 }
             });
-
-            // Mostramos los asientos disponibles
-            console.log('Disponibilidad de asientos (0: disponible, 1: ocupado):');
-
-            //* iteramos entre cada fila y hacemos un console.log de "fila:" y la fila que es, asi´nos ordenamos mejor para que el usuario entienda
+    
+            // Creanos un objeto para representar la disponibilidad de asientos
+            const asientosDisponibilidad = {};
+    
             asientos.forEach((fila, index) => {
-                console.log(`Fila ${index + 1}: ${fila.join(' ')}`);
+                asientosDisponibilidad[`Fila ${index + 1}`] = fila;
             });
-
-
+    
+            // Mostrar los asientos disponibles como objeto
+            console.log('Disponibilidad de asientos (0: disponible, 1: ocupado):');
+            console.log(asientosDisponibilidad);
+    
         } catch (error) {
             console.log("Error al encontrar asientos:", error);
-
+    
         } finally {
-            await this.close(); //* Cerramos conexión
+            await this.close(); // Cerrar conexión
         }
     }
+    
     
     // ----------- Asignación de Asientos, Caso de uso #3 ----------- //
     
@@ -169,15 +156,13 @@ export class Boletas extends connect {
      * @returns {object} el documento eliminado que en este caso sería el asiento
      * @throws {error} en caso de que no funcione la cancelacion de asiento
      */
-    async cancelSeat(){
+    async cancelSeat(deleteseat){
         try {
-            let res = await this.collection.deleteOne({"_id" : new ObjectId("66aa73d1c5561288e0bacb87")})
+            let res = await this.collection.deleteOne(deleteseat)
             console.log("Reserva eliminada correctamente")
             return res;
         } catch(error) {
             console.log("Error al cancelar asiento:", error);
-        } finally {
-            this.conexion.close()
         }
     }
 

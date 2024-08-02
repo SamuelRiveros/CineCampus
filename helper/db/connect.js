@@ -1,6 +1,6 @@
 import { MongoClient } from "mongodb";
 
-export class connect{
+export class connect {
     user;
     port;
     #pass;
@@ -8,9 +8,10 @@ export class connect{
     #cluster;
     #dbName;
     static instance;
-    constructor(){
-        if(typeof connect.instance === "object"){
-            return connect.instance
+    
+    constructor() {
+        if (typeof connect.instance === "object") {
+            return connect.instance;
         }
         this.user = process.env.MONGO_USER;
         this.port = process.env.MONGO_PORT;
@@ -60,20 +61,24 @@ export class connect{
         await this.#open();
     }
 
-    async #open () {
-        if(this.user != "mongo"){
-            console.log(`No estamos conectados como user mongo, nos conectamos con el DbName para que funcione bien conectada, la db se llama ${this.user}`)
-            this.conexion = new MongoClient(`${this.getHost}${this.user}:${this.getPass}@${this.getCluster}:${this.port}/${this.getDbName}`)
+    async #open() {
+        if (this.conexion && this.conexion.isConnected && this.conexion.isConnected()) {
+            return;
         }
-        else if(this.user == "mongo"){
-            console.log(`Estamos conectados como usuario mongo, quitamos el dbname para que la autenticacion funcione piola`)
-            this.conexion = new MongoClient(`${this.getHost}${this.user}:${this.getPass}@${this.getCluster}:${this.port}`)
+        
+        if (this.user !== "mongo") {
+            console.log(`No estamos conectados como user mongo, nos conectamos con el DbName para que funcione bien conectada, la db se llama ${this.user}`);
+            this.conexion = new MongoClient(`${this.getHost}${this.user}:${this.getPass}@${this.getCluster}:${this.port}/${this.getDbName}`);
+        } else if (this.user === "mongo") {
+            console.log(`Estamos conectados como usuario mongo, quitamos el dbname para que la autenticacion funcione piola`);
+            this.conexion = new MongoClient(`${this.getHost}${this.user}:${this.getPass}@${this.getCluster}:${this.port}`);
         }
         await this.conexion.connect();
     }
-    
-    async close(){
-        await this.conexion.close();
-    }
 
+    async close() {
+        if (this.conexion && this.conexion.isConnected && this.conexion.isConnected()) {
+            await this.conexion.close();
+        }
+    }
 }

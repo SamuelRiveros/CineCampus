@@ -24,14 +24,29 @@ Desarrollar una serie de APIs para la aplicación web de CineCampus utilizando M
    ```
    - **API para Obtener Detalles de Película:** Permitir la consulta de información detallada sobre una película específica, incluyendo sinopsis.
    ```js
+   const moviedetails = {"titulo" : "Inception"}
+
    let caso = new Peliculas()
-   console.log(await caso.listSpecificMovieDetails())
+   console.log(await caso.listSpecificMovieDetails(moviedetails))
    ```
 2. Compra de Boletos:
    - **API para Comprar Boletos:** Permitir la compra de boletos para una película específica, incluyendo la selección de la fecha y la hora de la proyección.
    ```js
+   const newTicket = {
+    _id: new ObjectId(),
+    id_cliente: new ObjectId("66ac08be701f366205f09d12"), //*Se crea con la id del cliente, en este caso deducimos que es el cliente que ingresa el dato, pero ingresamos la id para establecerlo como admins
+    tipo_pago: "online",
+    precio: 100,
+    columna: "A",
+    fila: 5, // Tener en cuenta el lugar que se le da a esa persona en la sala
+    sala: 2,
+    id_funcion: new ObjectId("66a595c6f6f7d62733068ac9") //*Indicamos también la id de la funcion, así en el mismo ticket asignamos a que funcion va a ir el cliente
+   }
+
    let caso = new Boletas()
-   console.log(await caso.BuyATicket())
+   console.log(await caso.BuyATicket(newTicket))
+   await caso.close()
+
    ```
    - **API para Verificar Disponibilidad de Asientos:** Permitir la consulta de la disponibilidad de asientos en una sala para una proyección específica.
    ```js
@@ -43,20 +58,21 @@ Desarrollar una serie de APIs para la aplicación web de CineCampus utilizando M
    const asientosDisponibles = await caso2.seatsReview(funcionId, sala);
 
    console.log(asientosDisponibles)
+   await caso2.close()
    ```
 
 3. Asignación de Asientos:
    - **API para Reservar Asientos:** Permitir la selección y reserva de asientos para una proyección específica.
    ```js
    //* Ya es posible, lo realizamos en el método "BuyATicket", ya que este metodo contiene las propiedades que nos pide la consulta, sin embargo aquí está la query de nuevo:
-
-   let caso = new Boletas()
-   console.log(await caso.BuyATicket())
    ```
    - **API para Cancelar Reserva de Asientos:** Permitir la cancelación de una reserva de asiento ya realizada.
    ```js
+   const deleteseat = {"_id" : new ObjectId("66ac72bd6bb58eaebde2ad7e")}
+
    let caso = new Boletas()
-   console.log(await caso.cancelSeat())
+   console.log(await caso.cancelSeat(deleteseat))
+   await caso.close()
    ```
 
 4. Descuentos y Tarjetas VIP:
@@ -192,20 +208,37 @@ Desarrollar una serie de APIs para la aplicación web de CineCampus utilizando M
    1. **API para Crear Usuario:** Permitir la creación de nuevos usuarios en el sistema, asignando roles y privilegios específicos (usuario estándar, usuario VIP o administrador).
 
    ```js
+   const clientData = {
+    _id: new ObjectId("66ac08be701f366205f09d12"),
+    nombre: "Miguel",
+    telefono: 3244717699,
+    email: "miguel.castro@gmail.com",
+    targeta_vip: false,
+    admin : false
+   };
+
    let caso = new Clientes()
-   console.log(await caso.createClientAndUser())
+   console.log(await caso.createClientAndUser(clientData))
+   await caso.close()
    ```
 
    2. **API para Obtener Detalles de Usuario:** Permitir la consulta de información detallada sobre un usuario, incluyendo su rol y estado de tarjeta VIP.
    ```js
+   const usuarioid = { _id: new ObjectId("66ac08be701f366205f09d12")}
+
    let caso = new Clientes()
-   console.log(await caso.findUsuario())
+   console.log(await caso.findUsuario(usuarioid))
    ```
    3. **API para Actualizar Rol de Usuario:** Permitir la actualización del rol de un usuario (por ejemplo, cambiar de usuario estándar a VIP, o viceversa).
 
    ```js
+   const userId = new ObjectId("66ac08be701f366205f09d12");
+   const targetavip = true
+   const isadmin = false
+
+
    let caso = new Clientes()
-   console.log(await caso.updateuser())
+   console.log(await caso.updateuser(userId, targetavip, isadmin))
    ```
    4. **API para Listar Usuarios:** Permitir la consulta de todos los usuarios del sistema, con la posibilidad de filtrar por rol (VIP, estándar o administrador).
 
