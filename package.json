@@ -5,15 +5,29 @@
   "directories": {
     "doc": "docs"
   },
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
-    "dev": "node --watch --env-file=.env main.js"
+    "dev": "node --watch --env-file .env ./backend/server/main.js",
+    "app": "node --watch --env-file .env ./backend/server/app.js",
+    "vite": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "mongodb": "^6.8.0"
+    "bcrypt": "^5.1.1",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "express-validator": "^7.2.0",
+    "mongodb": "^6.8.0",
+    "vue": "^3.4.38",
+    "vue-router": "^4.4.3"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.1.2",
+    "vite": "^5.4.2"
   }
 }

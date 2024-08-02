@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineCampus Order</title>
+    <link rel="stylesheet" href="../css/order.css">
+</head>
+<body>
+    <header>
+        <div class="ordermainheader">
+            <img src="/frontend/public/assets/icons/back.svg" class="back">
+            <h3 class="whitetext">Order Summary</h3>
+            <img src="/frontend/public/assets/icons/threedots.svg" class="dots">
+        </div>
+
+        <div class="moviesummaryimgzone">
+            <img src="/frontend/public/assets/images/movieplaceholder.png">
+
+            <div class="moviesummarytext">
+                <div class="moviesummaryinformation">
+                    <strong class="redtext">Movie Title Goes Here</strong>
+                    <p class="graytext">Genre goes here</p>
+                </div>
+
+                <div class="moviesummarylocation">
+                    <strong class="whitetext">Cinemark Caracoli</strong>
+                    <p class="graytext">Día | NroDía Mes Año | Hora</p>
+                </div>
+
+            </div>
+        </div>
+    </header>
+
+    <div class="ordernumber">
+        <span class="graytext">Order Number: </span><span class="whitetext">123456789</span>.
+    </div>
+
+    <section class="ordermain">
+        <div class="order-summary">
+            <div class="order-row">
+              <span class="left">1 Ticket</span>
+              <span class="right">C5</span>
+            </div>
+            <div class="order-row">
+              <span class="left">Regular Seat</span>
+              <span class="right">$24,99</span>
+            </div>
+            <div class="order-row">
+              <span class="left">Service Fee</span>
+              <span class="right">$1,99</span>
+            </div>
+        </div>
+    </section>
+    
+    <div class="payment">
+        <h3 class="whitetext">Payment Method</h3>
+
+        <div class="payment-method">
+            <img src="/frontend/public/assets/images/mastercardlogo.png" alt="MasterCard Logo" class="card-logo">
+            <div class="card-details">
+                <span class="card-name">MasterCard</span>
+                <span class="card-number">**** **** 0998 7865</span>
+            </div>
+        </div>
+
+        <div class="paymentTime">
+            <span class="graytext">Complete your payment in</span>
+            <span class="redtext">tiempo aqui</span>
+        </div>
+    </div>
+
+    <footer>
+        <button class="buyticket">Buy Ticket</button>
+    </footer>
+</body>
+</html>

@@ -1,6 +1,6 @@
-import { MongoClient } from "mongodb";
+const { MongoClient } =require("mongodb")
 
-export class connect {
+class Connect {
     user;
     port;
     #pass;
@@ -10,9 +10,9 @@ export class connect {
     static instance;
     
     constructor() {
-        if (typeof connect.instance === "object") {
-            return connect.instance;
-        }
+        // if (typeof Connect.instance === "object") {
+        //     return Connect.instance;
+        // }
         this.user = process.env.MONGO_USER;
         this.port = process.env.MONGO_PORT;
         this.setPass = process.env.MONGO_PWD;
@@ -21,8 +21,8 @@ export class connect {
         this.setDbName = process.env.MONGO_DB;
         this.#open();
         this.db = this.conexion.db(this.getDbName)
-        connect.instance = this;
-        return this;
+        // Connect.instance = this;
+        // return this;
     }
 
     set setPass(pass){
@@ -82,3 +82,4 @@ export class connect {
         }
     }
 }
+module.exports = Connect

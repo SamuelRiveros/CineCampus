@@ -1,7 +1,7 @@
-import { ObjectId } from "mongodb";
-import { connect } from "../../helper/db/connect.js";
+const Connect = require ("../helper/db/connect")
+const { ObjectId } = require ("mongodb")
 
-export class Clientes extends connect {
+class Clientes extends Connect {
     constructor() {
         if (typeof Clientes.instance === "object") {
             return Clientes.instance;
@@ -27,7 +27,7 @@ export class Clientes extends connect {
         }
         return password;
     }
-
+    
     /**
      * *Creamos el cliente y el usuario de mongo de forma respectiva
      * @returns {object} el cliente ingresado, si no tenemos errores no nos envía nada
@@ -222,3 +222,4 @@ export class Clientes extends connect {
     }
     
 }
+module.exports = {Clientes}
