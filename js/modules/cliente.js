@@ -1,7 +1,8 @@
-import { ObjectId } from "mongodb";
-import { connect } from "../../helper/db/connect.js";
+const { ObjectId } = require ( "mongodb")
+const { connect }  = require ("../../helper/db/connect")
 
-export class Clientes extends connect {
+class Clientes extends connect {
+    
     constructor() {
         if (typeof Clientes.instance === "object") {
             return Clientes.instance;
@@ -222,3 +223,5 @@ export class Clientes extends connect {
     }
     
 }
+
+module.exports = {Clientes}

@@ -1,6 +1,6 @@
-import { MongoClient } from "mongodb";
+const { MongoClient } = require ("mongodb")
 
-export class connect {
+class connect {
     user;
     port;
     #pass;
@@ -82,3 +82,5 @@ export class connect {
         }
     }
 }
+
+module.exports = {connect}

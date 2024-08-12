@@ -5,7 +5,7 @@
   "directories": {
     "doc": "docs"
   },
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
     "dev": "node --watch --env-file=.env main.js"
   },

@@ -1,6 +1,10 @@
-import { connect } from "./helper/db/connect.js";
-import { Peliculas } from "./js/modules/pelicula.js";
-import { Funciones } from "./js/modules/funcion.js";
-import { Clientes } from "./js/modules/cliente.js";
-import { Boletas } from "./js/modules/boleta.js";
-import { ObjectId } from "mongodb";
+const connect = require("./helper/db/connect");
+const { Peliculas } = require("./js/modules/pelicula");
+const { Funciones } = require("./js/modules/funcion");
+const { Clientes } = require("./js/modules/cliente");
+const { Boletas } = require("./js/modules/boleta");
+const { ObjectId } = require("mongodb");
+
+
+let caso = new Peliculas()
+caso.listAllMovies().then(res => console.log(res)).catch(res => console.log(res))
