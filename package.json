@@ -7,13 +7,15 @@
   },
   "type": "commonjs",
   "scripts": {
-    "dev": "node --watch --env-file=.env main.js"
+    "dev": "node --watch --env-file .env main.js",
+    "app": "node --watch --env-file .env app.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "express": "^4.19.2",
     "mongodb": "^6.8.0"
   }
 }
