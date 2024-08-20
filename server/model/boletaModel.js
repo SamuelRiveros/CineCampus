@@ -1,7 +1,7 @@
-import { connect } from "../../helper/db/connect.js";
+import { connect } from "../helper/db/connect.js";
 import { ObjectId } from "mongodb";
 
-export class Boletas extends connect {
+class Boletas extends connect {
     constructor() {
         if (typeof Boletas.instance === "object") {
             return Boletas.instance;
@@ -176,3 +176,5 @@ export class Boletas extends connect {
 
     //*También está en "BuyaTicket", verificar desde la linea 60
 }
+
+module.exports = {Boletas}

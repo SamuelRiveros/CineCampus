@@ -2,6 +2,10 @@
 
 ------
 
+**DB** : 
+
+*mongodb://mongo:qtdWsTVICWBEJpLOuOGUuIOyABfKmRWB@monorail.proxy.rlwy.net:44466*
+
 **Tiempo de ejecución**: 4 Dias
 
 **Nivel de dificultad:** ★★★★☆

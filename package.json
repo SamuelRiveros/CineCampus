@@ -5,9 +5,10 @@
   "directories": {
     "doc": "docs"
   },
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
-    "dev": "node --watch --env-file=.env main.js",
+    "dev": "node --watch --env-file .env main.js",
+    "app": "node --watch --env-file .env app.js",
     "vite": "vite",
     "build": "vite build",
     "serve": "vite preview"
@@ -17,6 +18,8 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "express": "^4.19.2",
+    "express-validator": "^7.2.0",
     "mongodb": "^6.8.0"
   },
   "devDependencies": {

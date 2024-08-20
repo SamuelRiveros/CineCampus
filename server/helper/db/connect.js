@@ -1,6 +1,6 @@
 import { MongoClient } from "mongodb";
 
-export class connect {
+class connect {
     user;
     port;
     #pass;
@@ -82,3 +82,4 @@ export class connect {
         }
     }
 }
+module.exports = {connect}
