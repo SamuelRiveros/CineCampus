@@ -7,7 +7,10 @@
   },
   "type": "module",
   "scripts": {
-    "dev": "node --watch --env-file=.env main.js"
+    "dev": "node --watch --env-file=.env main.js",
+    "vite": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
   },
   "keywords": [],
   "author": "",
@@ -15,5 +18,9 @@
   "description": "",
   "dependencies": {
     "mongodb": "^6.8.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.1.2",
+    "vite": "^5.4.2"
   }
 }
