@@ -67,4 +67,4 @@ class Peliculas extends Connect {
         return res;
     }
 }
-module.exports = {Peliculas}
+module.exports = Peliculas

@@ -1,4 +1,4 @@
-const { body, query, param } = require("express-validator");
+const { body, query, param, check, validationResult } = require("express-validator");
 
 exports.peliculaValidationEmpty = () => {
     return [
@@ -16,3 +16,10 @@ exports.peliculaValidationEmpty = () => {
         })
     ];
 };
+
+exports.peliculalistingSpecifications = () => {
+    return [
+        check("titulo").optional().isString().withMessage("El titulo debe ser una cadena de caracteres"),
+        check("genero").optional().isString().withMessage("El genero debe ser una cadena de caracteres")
+    ]
+}
