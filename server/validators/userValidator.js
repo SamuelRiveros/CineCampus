@@ -17,3 +17,20 @@ exports.usuarioValidationRulesCreation = () => {
         body('numero_tarjeta').optional().isLength({min: 16, max:16}).withMessage('El numero tiene que ser de 16 digitos').matches(/^\d+$/).withMessage('La tarjeta debe contener solo números')
     ]
 };
+
+exports.usuarioValidationEmpty = () => {
+    return [
+        body().custom((value, { req }) => {
+            if (Object.keys(req.body).length === 0) {
+                throw new Error('No envíe nada en el cuerpo');
+            }
+            return true;
+        }),
+        query().custom((value, { req }) => {
+            if (Object.keys(req.query).length === 0) {
+                throw new Error('No envíe nada en la url');
+            }
+            return true;
+        })
+    ];
+};

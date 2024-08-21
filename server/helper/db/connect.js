@@ -1,6 +1,6 @@
-import { MongoClient } from "mongodb";
+const { MongoClient } =require("mongodb")
 
-class connect {
+class Connect {
     user;
     port;
     #pass;
@@ -82,4 +82,4 @@ class connect {
         }
     }
 }
-module.exports = {connect}
+module.exports = Connect
