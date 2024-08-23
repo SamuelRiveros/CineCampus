@@ -1,4 +1,4 @@
-const Connect = require ("../helper/db/connect")
+const Connect = require( "../helper/db/connect")
 const { ObjectId } = require ("mongodb")
 
 class Boletas extends Connect {
@@ -177,4 +177,4 @@ class Boletas extends Connect {
     //*También está en "BuyaTicket", verificar desde la linea 60
 }
 
-module.exports = {Boletas}
+module.exports = Boletas

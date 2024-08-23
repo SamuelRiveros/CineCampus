@@ -218,12 +218,21 @@ Desarrollar una serie de APIs para la aplicación web de CineCampus utilizando M
     telefono: 3244717699,
     email: "miguel.castro@gmail.com",
     targeta_vip: false,
-    admin : false
+    admin: true
    };
 
-   let caso = new Clientes()
-   console.log(await caso.createClientAndUser(clientData))
-   await caso.close()
+   async function main() {
+      let caso = new Clientes();
+      try {
+         console.log(await caso.createClientAndUser(clientData));
+      } catch (error) {
+         console.error('Error en la función principal:', error);
+      } finally {
+         await caso.close();
+      }
+   }
+
+   main()
    ```
 
    2. **API para Obtener Detalles de Usuario:** Permitir la consulta de información detallada sobre un usuario, incluyendo su rol y estado de tarjeta VIP.

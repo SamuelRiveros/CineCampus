@@ -46,7 +46,8 @@ class Peliculas extends Connect {
                         titulo: 1,
                         genero: 1,
                         duracion: 1,
-                        funciones: "$funciones.horario_proyeccion" //! Proyectar solo el horario de proyección de la función
+                        funciones: "$funciones.horario_proyeccion", //! Proyectar solo el horario de proyección de la función
+                        img: 1
                     }
                 }
               ]).toArray();

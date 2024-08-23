@@ -3,6 +3,7 @@
     <ul>
       <li v-for="pelicula in peliculas" :key="pelicula.id">
         <h3>{{ pelicula.titulo }}</h3>
+        <img :src=pelicula.img>
         <p>Duración: {{ pelicula.duracion }}</p>
         <p>Género: {{ pelicula.genero }}</p>
       </li>

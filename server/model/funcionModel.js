@@ -12,4 +12,4 @@ class Funciones extends Connect {
         return this;
     }
 }
-module.exports = {Funciones}
+module.exports = Funciones
