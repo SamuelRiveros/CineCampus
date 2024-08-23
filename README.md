@@ -218,7 +218,8 @@ Desarrollar una serie de APIs para la aplicación web de CineCampus utilizando M
     telefono: 3244717699,
     email: "miguel.castro@gmail.com",
     targeta_vip: false,
-    admin: true
+    admin: true,
+    img: "https://www.iconpacks.net/icons/2/free-user-icon-3296-thumb.png"
    };
 
    async function main() {

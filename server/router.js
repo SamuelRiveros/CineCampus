@@ -14,6 +14,7 @@ router.get("/users", (req, res) => {
 
 
 // router.post("/users/v1", usuarioValidationRulesCreation(), createUser);
+
 //Listar todas las pelis en catalogo
 router.get("/movies/v1", peliculaValidationEmpty(), listAllMovies);
 //Listar pelicula con datos en especifico

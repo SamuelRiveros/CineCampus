@@ -31,28 +31,22 @@ class Clientes extends Connect {
     /**
      * *Creamos el cliente y el usuario de mongo de forma respectiva
      * @returns {object} el cliente ingresado, si no tenemos errores no nos envía nada
-     */
+    */
+
+    async findoneusuario(clientData) {
+
+        const existingCliente = await this.collection.findOne({
+            nombre: clientData.nombre,
+            telefono: clientData.telefono,
+            email: clientData.email,
+            targeta_vip: clientData.targeta_vip,
+            rol: clientData.rol,
+            img: clientData.img,
+        });
+    }
 
     async createClientAndUser(clientData) {
         try {
-            
-            const rol = clientData.targeta_vip ? "usuarioVip" : "usuarioEstandar";
-
-            const existingCliente = await this.collection.findOne({
-                nombre: clientData.nombre,
-                telefono: clientData.telefono,
-                email: clientData.email,
-                targeta_vip: clientData.targeta_vip,
-                rol: clientData.rol
-            });
-
-            if (existingCliente) {
-                console.log("El usuario ya existe:");
-                return existingCliente;
-            } else {
-                await this.collection.insertOne(clientData);
-                console.log("Cliente ingresado");
-            }
             
             // Creación del usuario
             const password = this.generateRandomPassword(8); // Contraseña de 8 caracteres
