@@ -1,48 +1,47 @@
-const { validationResult } = require('express-validator');
-const PeliculaDTO = require('../dto/peliculaDTO');
 const Peliculas = require('../model/peliculaModel');
+const PeliculaDTO = require('../dto/peliculaDTO');
+const movieValidator = require("../validators/movieValidator");
 
-const listAllMovies = async (req, res) => {
-  const peliculaDTO = new PeliculaDTO();
-  const peliculasModel = new Peliculas();
+const peliculaDTO = new PeliculaDTO();
+const peliculasModel = new Peliculas(); // Crea una instancia de Peliculas
 
-  try {
-    const movies = await peliculasModel.listAllMovies();
-    
-    if (movies.length === 0) {
-      return res.status(404).json(peliculaDTO.templateNotMovies());
+exports.listpeliculas = async (req, res) => {
+    // await Promise.all(movieValidator.peliculaValidationEmpty().map(validator => validator.run(req)));
+
+
+    try {
+        const movies = await peliculasModel.listAllMovies(); // Llama al método definido en la clase
+
+        if (movies.length === 0) {
+            return res.status(404).json(peliculaDTO.templateNotMovies());
+        }
+
+        return res.status(200).json(peliculaDTO.templateListMovies(movies));
+    } catch (error) {
+        console.error("Error al listar las películas:", error); // Añade un log para depuración
+        return res.status(500).json(peliculaDTO.templateMovieError(error.message));
     }
-
-    return res.status(200).json(peliculaDTO.templateListMovies(movies));
-  } catch (error) {
-    return res.status(500).json(peliculaDTO.templateMovieError(error.message));
-  }
 };
 
-
-const listSpecificMovieDetails = async(req, res) => {
-  const peliculaDTO = new PeliculaDTO();
-  const peliculasModel = new Peliculas();
-
-  const moviedetails = req.query || req.body;
-  
-  try {
-    const movie = await peliculasModel.listSpecificMovieDetails(moviedetails);
+// exports.listSpecificMovieDetails = async(req, res) => {
+//     await Promise.all(movieValidator.peliculalistingSpecifications().map(validator => validator.run(req)));
     
-    if(!movie) {
-      return res.status(404).json(peliculaDTO.templateNotMovies());
+//     const peliculaDTO = new PeliculaDTO();
+//     const peliculasModel = new Peliculas();
 
-    }
-
-    return res.status(200).json(peliculaDTO.templateListMovies([movie]));
+//     const moviedetails = req.query || req.body;
     
-  } catch(error) {
-    return res.status(500).json(peliculaDTO.templateMovieError(error.message));
-  }
-}
+//     try {
+//         const movie = await peliculasModel.listSpecificMovieDetails(moviedetails);
+        
+//         if(!movie) {
+//             return res.status(404).json(peliculaDTO.templateNotMovies());
+//         }
 
-
-module.exports = {
-  listAllMovies,
-  listSpecificMovieDetails
-};
+//         return res.status(200).json(peliculaDTO.templateListMovies([movie]));
+        
+//     } catch(error) {
+//         console.error("Error al obtener detalles de la película:", error); // Añade un log para depuración
+//         return res.status(500).json(peliculaDTO.templateMovieError(error.message));
+//     }
+// }

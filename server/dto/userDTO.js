@@ -3,7 +3,8 @@ module.exports = class UsuarioDTO {
     templateUserSaved(arg){
         return {
             status: 201,
-            data: arg
+            data: arg,
+            message: "Usuario guardado"
         }
     }
 

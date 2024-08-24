@@ -10,9 +10,9 @@ class Connect {
     static instance;
     
     constructor() {
-        if (typeof Connect.instance === "object") {
-            return Connect.instance;
-        }
+        // if (typeof Connect.instance === "object") {
+        //     return Connect.instance;
+        // }
         this.user = process.env.MONGO_USER;
         this.port = process.env.MONGO_PORT;
         this.setPass = process.env.MONGO_PWD;
@@ -21,8 +21,8 @@ class Connect {
         this.setDbName = process.env.MONGO_DB;
         this.#open();
         this.db = this.conexion.db(this.getDbName)
-        Connect.instance = this;
-        return this;
+        // Connect.instance = this;
+        // return this;
     }
 
     set setPass(pass){

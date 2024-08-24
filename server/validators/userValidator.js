@@ -1,24 +1,34 @@
-const { body, query, param } = require("express-validator");
+const { body } = require('express-validator');
 
-exports.usuarioValidationRulesCreation = () => {
+exports.userCreationValidation = () => {
     return [
-        body('nombre').notEmpty().isString().withMessage('El nombre es obligatorio'),
-        body('apellido').notEmpty().isString().withMessage('El apellido es obligatorio'),
-        body('nick').notEmpty().isString().withMessage('El nick es obligatorio'),
-        body('pwd').notEmpty().isString().withMessage('La contraseña es obligatoria'),
-        body('email').notEmpty().isEmail().withMessage('El email es obligatorio'),
-        body('telefono').notEmpty().isString().withMessage('El telefono es obligatorio'),
-        body('tipo', 'El tipo no se envio').notEmpty().exists().custom((value) => {
-            if(value && !['Estandar', 'VIP', 'Admin'].includes(value)) {
-                throw new Error("Solo hay tres roles disponibles 'Estandar', 'VIP' y 'Admin'");
-            }
-            return true;
-        }),
-        body('numero_tarjeta').optional().isLength({min: 16, max:16}).withMessage('El numero tiene que ser de 16 digitos').matches(/^\d+$/).withMessage('La tarjeta debe contener solo números')
-    ]
+        body('nombre')
+            .notEmpty().withMessage('El nombre es obligatorio')
+            .isString().withMessage('El nombre debe ser una cadena'),
+
+        body('telefono')
+            .notEmpty().withMessage('El teléfono es obligatorio')
+            .isString().withMessage('El teléfono debe ser una cadena'),
+
+        body('email')
+            .notEmpty().withMessage('El email es obligatorio')
+            .isEmail().withMessage('El email debe ser válido'),
+
+        body('admin')
+            .optional()
+            .isBoolean().withMessage('El admin debe ser un valor booleano'),
+
+        body('targeta_vip')
+            .optional()
+            .isBoolean().withMessage('La targeta_vip debe ser un valor booleano'),
+
+        body('img')
+            .optional()
+            .isURL().withMessage('La URL de la imagen debe ser válida')
+    ];
 };
 
-exports.usuarioValidationEmpty = () => {
+exports.usuarioEmptyValidation = () => {
     return [
         body().custom((value, { req }) => {
             if (Object.keys(req.body).length === 0) {
@@ -28,7 +38,7 @@ exports.usuarioValidationEmpty = () => {
         }),
         query().custom((value, { req }) => {
             if (Object.keys(req.query).length === 0) {
-                throw new Error('No envíe nada en la url');
+                throw new Error('No envíe nada en la URL');
             }
             return true;
         })

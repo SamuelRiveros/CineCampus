@@ -2,22 +2,23 @@ const router = require('express').Router();
 const path = require('path');
 
 //user
-const { createUser } = require('./controllers/userController');
-const { usuarioValidationRulesCreation } = require('./validators/userValidator');
+const userController = require('./controllers/userController');
 
-const { listAllMovies, listSpecificMovieDetails } = require('./controllers/movieController');
-const { peliculaValidationEmpty, peliculalistingSpecifications } = require('./validators/movieValidator');
+const movieController = require('./controllers/movieController');
 
-router.get("/users", (req, res) => {
-    res.sendFile(path.join(__dirname, process.env.EXPRESS_STATIC, 'views/users.html'));
-});
+//seccion de usuarios 
+router.post('/client', userController.createClient);
+router.get('/users', userController.getUsersByRole);
+router.put('/user', userController.updateUser);
 
 
-// router.post("/users/v1", usuarioValidationRulesCreation(), createUser);
+// seccion peliculas
 
-//Listar todas las pelis en catalogo
-router.get("/movies/v1", peliculaValidationEmpty(), listAllMovies);
-//Listar pelicula con datos en especifico
-router.get("/movies/v2", peliculalistingSpecifications(), listSpecificMovieDetails)
+//- Listar todas las pelis en catalogo
+router.get('/movies', movieController.listpeliculas)
+
+//router.get("/movies/v1", peliculaValidationEmpty(), listAllMovies);
+//- Listar pelicula con datos en especifico
+// router.get("/movie", movieController.listSpecificMovieDetails)
 
 module.exports = router;
