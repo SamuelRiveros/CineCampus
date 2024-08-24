@@ -40,6 +40,9 @@ class Clientes extends Connect {
                 ]
             });
 
+            await this.collection.insertOne(clientData)
+            console.log("Cliente ingresado en la coleccion de clientes")
+
             return clientData;
         } catch (error) {
             throw new Error(`Error al insertar cliente: ${error}`);
