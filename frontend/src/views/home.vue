@@ -1,6 +1,8 @@
 <template>
-  <div></div>
-  <div id="contenedor-datos">
+  <div id="bground">
+    <p>Holas perolas</p>
+  </div>
+  <!-- <div id="contenedor-datos">
     <ul>
       <li v-for="pelicula in peliculas" :key="pelicula.id">
         <h3>{{ pelicula.titulo }}</h3>
@@ -9,7 +11,7 @@
         <p>Género: {{ pelicula.genero }}</p>
       </li>
     </ul>
-  </div>
+  </div> -->
 </template>
 
 <script>
@@ -39,6 +41,6 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 @import '../../public/css/home.css'; /* Reemplaza con la ruta a tu archivo CSS */
 </style>
