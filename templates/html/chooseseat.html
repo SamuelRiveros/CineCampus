@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineCampus chooseseat</title>
+    <link rel="stylesheet" href="../css/chooseseat.css">
+    <script type="module" src="../js/chooseseat.js" defer></script>
+</head>
+<body>
+    <section class="asientos">
+        <form id="myform">
+            <article class="asientos__normal">
+                <div fila="1">
+                    <small>A</small>
+                    <div class="asientos__lista">
+                        <input type="checkbox" name="seat" value="A1" id="A1"><label for="A1" data-place="1"></label>
+                        <input type="checkbox" name="seat" value="A2" id="A2"><label for="A2" data-place="2"></label>
+                        <input type="checkbox" name="seat" value="A3" id="A3"><label for="A3" data-place="3"></label>
+                        <input type="checkbox" name="seat" value="A4" id="A4"><label for="A4" data-place="4"></label>
+                        <input type="checkbox" name="seat" value="A5" id="A5"><label for="A5" data-place="5"></label>
+                    </div>
+                </div>
+                <div fila="2">
+                    <small>B</small>
+                    <div class="asientos__lista">
+                        <input type="checkbox" name="seat" value="B1" id="B1"><label for="B1" data-place="1"></label>
+                        <input type="checkbox" name="seat" value="B2" id="B2"><label for="B2" data-place="2"></label>
+                        <input type="checkbox" name="seat" value="B3" id="B3"><label for="B3" data-place="3"></label>
+                        <input type="checkbox" name="seat" value="B4" id="B4"><label for="B4" data-place="4"></label>
+                        <input type="checkbox" name="seat" value="B5" id="B5"><label for="B5" data-place="5"></label>
+                        <input type="checkbox" name="seat" value="B6" id="B6"><label for="B6" data-place="6"></label>
+                        <input type="checkbox" name="seat" value="B7" id="B7"><label for="B7" data-place="7"></label>
+                    </div>
+                </div>
+            </article>
+            <article class="asientos__preferenciales">
+                <div colum="3">
+                    <small>C</small>
+                    <div>
+                        <input type="checkbox" name="seat" value="C1" id="C1"><label for="C1" data-place="1"></label>
+                        <input type="checkbox" name="seat" value="C2" id="C2"><label for="C2" data-place="2"></label>
+                        <input type="checkbox" name="seat" value="C3" id="C3"><label for="C3" data-place="3"></label>
+                        <input type="checkbox" checked name="seat" value="C4" id="C4"><label for="C4" data-place="4"></label>
+                        <input type="checkbox" checked name="seat" value="C5" id="C5"><label for="C5" data-place="5"></label>
+                        <input type="checkbox" checked name="seat" value="C6" id="C6"><label for="C6" data-place="6"></label>
+                        <input type="checkbox" name="seat" value="C7" id="C7"><label for="C7" data-place="7"></label>
+                        <input type="checkbox" name="seat" value="C8" id="C8"><label for="C8" data-place="8"></label>
+                        <input type="checkbox" name="seat" value="C9" id="C9"><label for="C9" data-place="9"></label>
+                    </div>
+                </div>
+                <div colum="4">
+                    <small>D</small>
+                    <div>
+                        <input type="checkbox" disabled class="reserved" name="seat" value="D1" id="D1"><label for="D1" data-place="1"></label>
+                        <input type="checkbox" disabled class="reserved" name="seat" value="D2" id="D2"><label for="D2" data-place="2"></label>
+                        <input type="checkbox" disabled class="reserved" name="seat" value="D3" id="D3"><label for="D3" data-place="3"></label>
+                        <input type="checkbox" disabled class="reserved" name="seat" value="D4" id="D4"><label for="D4" data-place="4"></label>
+                        <input type="checkbox" disabled class="reserved" name="seat" value="D5" id="D5"><label for="D5" data-place="5"></label>
+                        <input type="checkbox" disabled class="reserved" name="seat" value="D6" id="D6"><label for="D6" data-place="6"></label>
+                        <input type="checkbox" disabled class="reserved" name="seat" value="D7" id="D7"><label for="D7" data-place="7"></label>
+                        <input type="checkbox" disabled class="reserved" name="seat" value="D8" id="D8"><label for="D8" data-place="8"></label>
+                        <input type="checkbox" disabled class="reserved" name="seat" value="D9" id="D9"><label for="D9" data-place="9"></label>
+                    </div>
+                </div>
+                <div colum="5">
+                    <small>E</small>
+                    <div>
+                        <input type="checkbox" disabled class="reserved" name="seat" value="E1" id="E1"><label for="E1" data-place="1"></label>
+                        <input type="checkbox" disabled class="reserved" name="seat" value="E2" id="E2"><label for="E2" data-place="2"></label>
+                        <input type="checkbox" disabled class="reserved" name="seat" value="E3" id="E3"><label for="E3" data-place="3"></label>
+                        <input type="checkbox" disabled class="reserved" name="seat" value="E4" id="E4"><label for="E4" data-place="4"></label>
+                        <input type="checkbox" disabled class="reserved" name="seat" value="E5" id="E5"><label for="E5" data-place="5"></label>
+                        <input type="checkbox" disabled class="reserved" name="seat" value="E6" id="E6"><label for="E6" data-place="6"></label>
+                        <input type="checkbox" disabled class="reserved" name="seat" value="E7" id="E7"><label for="E7" data-place="7"></label>
+                        <input type="checkbox" disabled class="reserved" name="seat" value="E8" id="E8"><label for="E8" data-place="8"></label>
+                        <input type="checkbox" disabled class="reserved" name="seat" value="E9" id="E9"><label for="E9" data-place="9"></label>
+                    </div>
+                </div>
+                <div colum="6">
+                    <small>F</small>
+                    <div>
+                        <input type="checkbox" disabled class="reserved" name="seat" value="F1" id="F1"><label for="F1" data-place="1"></label>
+                        <input type="checkbox" disabled class="reserved" name="seat" value="F2" id="F2"><label for="F2" data-place="2"></label>
+                        <input type="checkbox" disabled class="reserved" name="seat" value="F3" id="F3"><label for="F3" data-place="3"></label>
+                        <input type="checkbox" disabled class="reserved" name="seat" value="F4" id="F4"><label for="F4" data-place="4"></label>
+                        <input type="checkbox" disabled class="reserved" name="seat" value="F5" id="F5"><label for="F5" data-place="5"></label>
+                        <input type="checkbox" disabled class="reserved" name="seat" value="F6" id="F6"><label for="F6" data-place="6"></label>
+                        <input type="checkbox" disabled class="reserved" name="seat" value="F7" id="F7"><label for="F7" data-place="7"></label>
+                        <input type="checkbox" disabled class="reserved" name="seat" value="F8" id="F8"><label for="F8" data-place="8"></label>
+                        <input type="checkbox" disabled class="reserved" name="seat" value="F9" id="F9"><label for="F9" data-place="9"></label>
+                    </div>
+                </div>
+            </article>
+            <article class="asientos__menu">
+                <div>
+                    <small></small> <label>Available</label>
+                </div>
+                <div>
+                    <small></small> <label>Reserved</label>
+                </div>
+                <div>
+                    <small></small> <label>Selected</label>
+                </div>
+            </article>
+            <button type="submit">Enviar</button>
+        </form>
+    </section>
+    
+</body>
+</html>
+
