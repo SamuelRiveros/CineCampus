@@ -7,8 +7,8 @@
   },
   "type": "commonjs",
   "scripts": {
-    "dev": "node --watch --env-file .env main.js",
-    "app": "node --watch --env-file .env app.js",
+    "dev": "node --watch --env-file .env ./backend/server/main.js",
+    "app": "node --watch --env-file .env ./backend/server/app.js",
     "vite": "vite",
     "build": "vite build",
     "serve": "vite preview"

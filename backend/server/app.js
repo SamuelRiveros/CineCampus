@@ -2,7 +2,7 @@ const cors = require('cors');
 
 const express = require("express");
 const path = require("path");
-const router = require('./server/router'); // Importa el router
+const router = require('../server/router'); // Importa el router
 
 const app = express();
 

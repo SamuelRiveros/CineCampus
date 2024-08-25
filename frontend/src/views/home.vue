@@ -1,4 +1,5 @@
 <template>
+  <div></div>
   <div id="contenedor-datos">
     <ul>
       <li v-for="pelicula in peliculas" :key="pelicula.id">
@@ -39,5 +40,5 @@ export default {
 </script>
 
 <style scoped>
-/* Agrega estilos si es necesario */
+@import '../../public/css/home.css'; /* Reemplaza con la ruta a tu archivo CSS */
 </style>
