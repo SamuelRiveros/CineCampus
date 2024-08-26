@@ -6,13 +6,8 @@
     </div>
   </template>
   
-  <script>
-  export default {
+<script>
+    export default {
     name: 'Ticket',
-  };
-  </script>
-  
-  <style scoped>
-  /* Estilos específicos de Home.vue */
-  </style>
-  
+    };
+</script>

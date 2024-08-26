@@ -5,13 +5,8 @@
     </div>
   </template>
   
-  <script>
-  export default {
+<script>
+    export default {
     name: 'ChooseSeat',
-  };
-  </script>
-  
-  <style scoped>
-  /* Estilos específicos de Home.vue */
-  </style>
-  
+    };
+</script>

@@ -1,18 +1,13 @@
 <!-- frontend/src/paginas/Home.vue -->
 <template>
     <div>
-      <h1>Bienvenido a la pagina de Order de CineCampus</h1>
-      <!-- Otros contenidos y botones -->
+        <h1>Bienvenido a la pagina de Order de CineCampus</h1>
+        <!-- Otros contenidos y botones -->
     </div>
-  </template>
+</template>
   
-  <script>
-  export default {
+<script>
+    export default {
     name: 'Order',
-  };
-  </script>
-  
-  <style scoped>
-  /* Estilos específicos de Home.vue */
-  </style>
-  
+    };
+</script>
