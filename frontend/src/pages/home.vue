@@ -211,3 +211,9 @@ footer img:hover {
   transition: opacity 0.3s ease;
 }
 </style>
+
+<script>
+export default {
+  name: 'Home',
+};
+</script>

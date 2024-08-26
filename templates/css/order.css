@@ -5,11 +5,12 @@
 }
 
 body {
-  background-color: #121212;
-  padding-bottom: 80px;
-  margin: 0;
-  overflow-x: hidden;
-  font-family: 'Arial', sans-serif;
+    width: 100vw;
+    background-color: #121212;
+    padding-bottom: 80px;
+    margin: 0;
+    overflow-x: hidden;
+    font-family: 'Arial', sans-serif;
 }
 
 /* Text colors */
