@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import Home from './pages/Home.vue';
+import Home from './pages/home.vue';
 import ChooseSeat from './pages/chooseseat.vue';
 import Cinema from './pages/cinema.vue';
 import Order from './pages/order.vue';

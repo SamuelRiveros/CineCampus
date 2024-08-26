@@ -7,17 +7,21 @@ const userController = require('./controllers/userController');
 const { listAllMovies, listSpecificMovieDetails } = require('./controllers/movieController');
 const { peliculaValidationEmpty, peliculalistingSpecifications } = require('./validators/movieValidator');
 
-//seccion de usuarios 
-router.post('/client', userController.createClient);
-router.get('/users', userController.getUsersByRole);
-router.put('/user', userController.updateUser);
-
-
 // seccion peliculas
 
 //Listar todas las pelis en catalogo
-router.get("/movies/v1", peliculaValidationEmpty(), listAllMovies);
+router.get("/getallmovies", peliculaValidationEmpty(), listAllMovies);
 //Listar pelicula con datos en especifico
-router.get("/movies/v2", peliculalistingSpecifications(), listSpecificMovieDetails)
+router.get("/getspecificmovie", peliculalistingSpecifications(), listSpecificMovieDetails)
+
+
+//seccion de usuarios 
+router.get('/getallusers', userController.listAllUsers);
+router.get('/getuserbyid/:id', userController.getUserById);
+router.post('/createclient', userController.createClient);
+router.get('/getusersbyrole', userController.getUsersByRole);
+router.put('/updateuser', userController.updateUser);
+
+
 
 module.exports = router;

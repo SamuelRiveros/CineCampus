@@ -1,9 +1,79 @@
+<script>
+import { ref, onMounted, reactive } from 'vue';
+
+export default {
+  name: 'Home',
+  setup() {
+    const peliculas = ref([]);
+    const usuario = ref({});
+    const activeIndex = ref(0); // Índice de la película actualmente visible
+    const scroller = ref(null); // Referencia al contenedor de películas
+
+    // obtener datos de las peliculas
+    const fetchPeliculas = async () => {
+      try {
+        const response = await fetch('http://localhost:3001/api/getallmovies');
+        const data = await response.json();
+        peliculas.value = data.data; // Ajusta según la estructura de tu respuesta
+      } catch (error) {
+        console.error('Error al obtener datos:', error);
+      }
+    };
+
+    // obtener datos de un usuario
+    const fetchUsuario = async (id) => {
+      try {
+        const response = await fetch(`http://localhost:3001/api/getuserbyid/${id}`);
+        const data = await response.json();
+        usuario.value = data.data;
+      } catch (error) {
+        console.error('Error al obtener datos:', error);
+      }
+    };
+
+    // Función para desplazarse a una película específica
+    const scrollToMovie = (index) => {
+      if (scroller.value) {
+        const movieElement = scroller.value.children[index];
+        movieElement.scrollIntoView({ behavior: 'smooth', inline: 'start' });
+        activeIndex.value = index; // Actualizamos el índice activo
+      }
+    };
+
+    // Actualizamos el índice activo basado en el desplazamiento
+    const updateActiveIndex = () => {
+      const scrollerElement = scroller.value;
+      if (scrollerElement) {
+        const scrollLeft = scrollerElement.scrollLeft;
+        const movieWidth = scrollerElement.children[0].offsetWidth;
+        activeIndex.value = Math.round(scrollLeft / movieWidth);
+      }
+    };
+
+    // podemos agregar un event listener para el scroll en el movie scroller
+    onMounted(() => {
+      fetchPeliculas();
+      fetchUsuario('66b52ab3416d8d97d3409e26');
+      
+      if (scroller.value) {
+        scroller.value.addEventListener('scroll', updateActiveIndex);
+      }
+    });
+
+    return { peliculas, usuario, activeIndex, scroller, scrollToMovie };
+  }
+};
+</script>
+
+
+
 <template>
   <div class="bodyhome">
     <header class="headerhome">
-      <img src="/frontend/public/assets/icons/usericon.png" class="usericon" />
+      <img :src=usuario.img class="usericon">
       <div class="greeting">
-        <p>Hi, UserPlaceHolder!</p>
+        <p v-if="usuario">Hi, {{ usuario.nombre }} !</p>
+        <p v-else>Loading user. . .</p>
         <p>Lets watch a movie together!</p>
       </div>
       <img src="/frontend/public/assets/icons/notification.png" class="notification" />
@@ -19,16 +89,30 @@
         <p class="redtext">See all</p>
       </div>
 
-      <div class="movie-scroller">
-        <img src="/frontend/public/assets/images/movieplaceholder.png" />
-        <img src="/frontend/public/assets/images/movieplaceholder.png" />
-        <img src="/frontend/public/assets/images/movieplaceholder.png" />
+      <!-- Movie Scroller -->
+
+      <div class="movie-scroller" ref="scroller">
+        
+        <div class="movie" v-for="(pelicula, index) in peliculas" :key="pelicula.id">
+
+          <img :src="pelicula.img" alt="Imagen de la película" />
+          <div class="movieDetails">
+
+            <h3 class="whitetext">{{ pelicula.titulo }}</h3>
+            <p>{{ pelicula.genero }}</p>
+            
+          </div>
+        </div>
       </div>
 
-      <div class="moviedetailshome">
-        <h2 class="whitetext">Movie Title Placeholder</h2>
-        <p class="graytext">Movie Type Placeholder</p>
-        <img src="/frontend/public/assets/icons/Slider Indicator.png" />
+      <div class="navigation-dots">
+          <span
+          v-for="(pelicula, index) in peliculas"
+          :key="'dot-' + index"
+          class="dot"
+          :class="{ active: activeIndex === index }"
+          @click="scrollToMovie(index)"
+        ></span>
       </div>
 
       <div class="comingsoonhome">
@@ -94,7 +178,11 @@
 }
 
 .headerhome .usericon {
-  width: 10%;
+  border-radius: 50%;
+  height: 70px;
+  width: 70px;
+  max-height: 70px;
+  max-width: 70px;
 }
 
 .headerhome .notification {
@@ -132,14 +220,22 @@
   height: 450px;
   display: flex;
   overflow-x: auto;
-  overflow-y: hidden;
   gap: 20px;
   padding: 10px;
   scroll-snap-type: x mandatory;
 }
 
-.movie-scroller img {
-  height: auto;
+.movie {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+  width: 250px; /* Ajusta según el diseño */
+  margin-right: 16px;
+}
+
+.movie img {
+  width: 240px;
+  min-height: 360px;
+  max-width: 250px;
   cursor: pointer;
   scroll-snap-align: center;
   object-fit: cover;
@@ -147,14 +243,41 @@
   flex-shrink: 0;
 }
 
+.movieDetails {
+  padding-top: 10px;
+  text-align: center;
+}
+
+.movieDetails h3 {
+  font-size: 15px;
+}
+
+.movieDetails p {
+  font-size: 12px;
+  color: #9e9e9e;
+}
+
 /* Movie Details home */
 
-.moviedetailshome {
+.navigation-dots {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 3%;
-  gap: 10px;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.dot {
+  height: 10px;
+  width: 10px;
+  margin: 0 5px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.dot.active {
+  background-color: #717171;
 }
 
 /* Coming Soon */
@@ -211,9 +334,3 @@ footer img:hover {
   transition: opacity 0.3s ease;
 }
 </style>
-
-<script>
-export default {
-  name: 'Home',
-};
-</script>

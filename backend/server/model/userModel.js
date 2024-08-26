@@ -12,6 +12,21 @@ class Clientes extends Connect {
         return this;
     }
 
+    async listAllUsers() {
+        let res = await this.collection.find({}).toArray()
+        return res;
+    }
+
+    async getUserById(userId) {
+        try {
+            let res = await this.collection.findOne({ _id: new ObjectId(userId) });
+            return res;
+        } catch (error) {
+            console.error('Error fetching user:', error);
+            throw new Error('Error fetching user');
+        }
+    }
+
     generateRandomPassword(length) {
         const charset = "abcdefg";
         let password = "";

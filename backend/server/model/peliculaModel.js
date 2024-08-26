@@ -45,9 +45,12 @@ class Peliculas extends Connect {
                     $project: {
                         titulo: 1,
                         genero: 1,
+                        sinopsis: 1,
                         duracion: 1,
                         funciones: "$funciones.horario_proyeccion", //! Proyectar solo el horario de proyección de la función
-                        img: 1
+                        img: 1,
+                        en_catalogo: 1,
+                        trailer: 1
                     }
                 }
               ]).toArray();
