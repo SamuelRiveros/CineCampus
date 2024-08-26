@@ -4,8 +4,6 @@ const path = require('path');
 //user
 const userController = require('./controllers/userController');
 
-const movieController = require('./controllers/movieController');
-
 const { listAllMovies, listSpecificMovieDetails } = require('./controllers/movieController');
 const { peliculaValidationEmpty, peliculalistingSpecifications } = require('./validators/movieValidator');
 
