@@ -8,11 +8,23 @@
     <script type="module" src="../js/chooseseat.js" defer></script>
 </head>
 <body>
+
+    <header>
+        <img src="/frontend/public/assets/icons/back.svg" class="back">
+        <h3 class="whitetext">Choose Seat</h3>
+        <img src="/frontend/public/assets/icons/threedots.svg" class="dots">
+    </header>
+
     <section class="asientos">
+
+        <div class="screenthisway">
+            <img src="/frontend/public/assets/images/screenthisway.png">
+        </div>
+
         <form id="myform">
             <article class="asientos__normal">
                 <div fila="1">
-                    <small>A</small>
+                    <small class="whitetext">A</small>
                     <div class="asientos__lista">
                         <input type="checkbox" name="seat" value="A1" id="A1"><label for="A1" data-place="1"></label>
                         <input type="checkbox" name="seat" value="A2" id="A2"><label for="A2" data-place="2"></label>
@@ -22,7 +34,7 @@
                     </div>
                 </div>
                 <div fila="2">
-                    <small>B</small>
+                    <small class="whitetext">B</small>
                     <div class="asientos__lista">
                         <input type="checkbox" name="seat" value="B1" id="B1"><label for="B1" data-place="1"></label>
                         <input type="checkbox" name="seat" value="B2" id="B2"><label for="B2" data-place="2"></label>
@@ -36,7 +48,7 @@
             </article>
             <article class="asientos__preferenciales">
                 <div colum="3">
-                    <small>C</small>
+                    <small class="whitetext">C</small>
                     <div>
                         <input type="checkbox" name="seat" value="C1" id="C1"><label for="C1" data-place="1"></label>
                         <input type="checkbox" name="seat" value="C2" id="C2"><label for="C2" data-place="2"></label>
@@ -50,7 +62,7 @@
                     </div>
                 </div>
                 <div colum="4">
-                    <small>D</small>
+                    <small class="whitetext">D</small>
                     <div>
                         <input type="checkbox" disabled class="reserved" name="seat" value="D1" id="D1"><label for="D1" data-place="1"></label>
                         <input type="checkbox" disabled class="reserved" name="seat" value="D2" id="D2"><label for="D2" data-place="2"></label>
@@ -64,7 +76,7 @@
                     </div>
                 </div>
                 <div colum="5">
-                    <small>E</small>
+                    <small class="whitetext">E</small>
                     <div>
                         <input type="checkbox" disabled class="reserved" name="seat" value="E1" id="E1"><label for="E1" data-place="1"></label>
                         <input type="checkbox" disabled class="reserved" name="seat" value="E2" id="E2"><label for="E2" data-place="2"></label>
@@ -78,7 +90,7 @@
                     </div>
                 </div>
                 <div colum="6">
-                    <small>F</small>
+                    <small class="whitetext">F</small>
                     <div>
                         <input type="checkbox" disabled class="reserved" name="seat" value="F1" id="F1"><label for="F1" data-place="1"></label>
                         <input type="checkbox" disabled class="reserved" name="seat" value="F2" id="F2"><label for="F2" data-place="2"></label>
@@ -94,17 +106,37 @@
             </article>
             <article class="asientos__menu">
                 <div>
-                    <small></small> <label>Available</label>
+                    <span class="circle available"></span> <label class="whitetext">Available</label>
                 </div>
                 <div>
-                    <small></small> <label>Reserved</label>
+                    <span class="circle reserved"></span> <label class="whitetext">Reserved</label>
                 </div>
                 <div>
-                    <small></small> <label>Selected</label>
+                    <span class="circle selected"></span> <label class="whitetext">Selected</label>
                 </div>
             </article>
-            <button type="submit">Enviar</button>
+            
+            <footer>
+                <div class="price whitetext">
+                    <p>Price</p>
+                    <strong>$24,99</strong>
+                </div>
+        
+                <button type="submit">Buy Ticket</button>
+            </footer>
+            
         </form>
+
+        <div class="funciondata">
+            <section class="day">
+                <p>Aug</p>
+                <strong>17</strong>
+            </section>
+
+            <section class="time">
+                <p>10:00</p>
+            </section>
+        </div>
     </section>
     
 </body>

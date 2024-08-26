@@ -9,14 +9,42 @@ body {
     padding-bottom: 80px;
     margin: 0;
     overflow-x: hidden;
+    font-family: 'Arial', sans-serif;
 }
+
+
+header {
+    display: flex;
+    justify-content: space-between;
+    padding: 30px;
+}
+
+.whitetext {
+    color: white;
+}
+  
+.redtext {
+    color: red;
+}
+  
+.graytext {
+    color: gray;
+}
+
+.screenthisway {
+    display: flex;
+    justify-content: center;
+}
+
 
 .asientos{
     padding: 0 15px;
 }
+
 .asientos__normal{
     margin-bottom: 30px !important;
 }
+
 .asientos__normal, 
 .asientos__preferenciales{
     display: flex;
@@ -25,6 +53,7 @@ body {
     flex-direction: column;
     align-items: center;
 }
+
 .asientos__normal div,
 .asientos__preferenciales div{
     width: 100%;
@@ -37,6 +66,7 @@ body {
 .asientos__preferenciales input[type="checkbox"]{
     display: none;
 }
+
 .asientos__lista input[type="checkbox"] + label:before,
 .asientos__preferenciales input[type="checkbox"] + label:before {
     content: "";
@@ -51,6 +81,7 @@ body {
     background: #323232;
     border-radius: 5px;
 }
+
 .asientos__lista input[type="checkbox"]:checked + label:after,
 .asientos__preferenciales input[type="checkbox"]:checked + label:after {
     content: attr(data-place);
@@ -66,10 +97,12 @@ body {
     border-radius: 5px;
     margin-left: -2.2em;
 }
+
 .asientos__lista input[type="checkbox"] + label:hover::before,
 .asientos__preferenciales input[type="checkbox"] + label:hover::before {
     background: #FE0000;
 }
+
 .asientos__lista input[type="checkbox"] + label:hover::after,
 .asientos__preferenciales input[type="checkbox"] + label:hover::after {
     cursor: pointer;
@@ -86,14 +119,192 @@ body {
     border-radius: 5px;
     margin-left: -2.2em;
 }
+
 .asientos__lista input[type="checkbox"].reserved + label:before,
 .asientos__preferenciales input[type="checkbox"].reserved + label:before{
     content: "";
     background: #CECECE ;
 }
+
 .asientos__lista input[type="checkbox"].reserved + label:hover::after,
 .asientos__preferenciales input[type="checkbox"].reserved + label:hover::after{
     content: attr(data-place);
     background: #CECECE ;
     cursor: default;
+}
+
+
+/* Estilo para el contenedor de los círculos */
+.asientos__menu {
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* Espacio entre los elementos */
+}
+
+.asientos__menu div {
+    display: flex;
+    align-items: center;
+}
+
+
+/* Estilo para los círculos */
+.circle {
+    display: inline-block;
+    width: 20px; /* Tamaño del círculo */
+    height: 20px; /* Tamaño del círculo */
+    border-radius: 50%; /* Hace que el elemento sea un círculo */
+    margin-right: 10px; /* Espacio entre el círculo y el texto */
+}
+
+/* Colores para los círculos */
+.available {
+    background-color: #323232; /* Color para Disponible */
+}
+
+.reserved {
+    background-color: #CECECE; /* Color para Reservado */
+}
+
+.selected {
+    background-color: #FE0000; /* Color para Seleccionado */
+}
+
+.funciondata {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding-top: 20px;
+    gap: 30px;
+}
+
+.funciondata .day {
+    background-color: white;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 50px;
+    height: 70px;
+}
+
+.funciondata .time {
+    background-color: white;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 70px;
+    height: 50px;
+}
+
+
+/* Footer */
+
+
+footer {
+    display: flex;
+    bottom: 0;
+    width: 100%;
+    height: 10%;
+    justify-content: space-around;
+    align-items: center;
+    position: fixed;
+    left: 0;
+}
+
+footer button {
+    position: relative;
+    padding: 20px 100px; /* Define el tamaño del botón principalmente con padding */
+    border-radius: 6px;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    background-color: red;
+    transition: all 0.2s ease;
+}
+
+footer button:active {
+    transform: scale(0.96);
+}
+
+footer button:before,
+footer button:after {
+    position: absolute;
+    content: "";
+    width: 150%; /* Proporcional al tamaño del botón */
+    left: 50%;
+    height: 100%;
+    transform: translateX(-50%);
+    z-index: -1000;
+    background-repeat: no-repeat;
+}
+
+footer button:hover:before {
+    top: -70%;
+    background-image: radial-gradient(circle, red 20%, transparent 20%),
+        radial-gradient(circle, transparent 20%, red 20%, transparent 30%),
+        radial-gradient(circle, red 20%, transparent 20%),
+        radial-gradient(circle, red 20%, transparent 20%),
+        radial-gradient(circle, transparent 10%, red 15%, transparent 20%),
+        radial-gradient(circle, red 20%, transparent 20%),
+        radial-gradient(circle, red 20%, transparent 20%),
+        radial-gradient(circle, red 20%, transparent 20%),
+        radial-gradient(circle, red 20%, transparent 20%);
+    background-size: 10% 10%, 20% 20%, 15% 15%, 20% 20%, 18% 18%, 10% 10%, 15% 15%,
+        10% 10%, 18% 18%;
+    background-position: 50% 120%;
+    animation: redtopBubbles 0.6s ease;
+}
+
+@keyframes redtopBubbles {
+    0% {
+        background-position: 5% 90%, 10% 90%, 10% 90%, 15% 90%, 25% 90%, 25% 90%,
+            40% 90%, 55% 90%, 70% 90%;
+    }
+
+    50% {
+        background-position: 0% 80%, 0% 20%, 10% 40%, 20% 0%, 30% 30%, 22% 50%,
+            50% 50%, 65% 20%, 90% 30%;
+    }
+
+    100% {
+        background-position: 0% 70%, 0% 10%, 10% 30%, 20% -10%, 30% 20%, 22% 40%,
+            50% 40%, 65% 10%, 90% 20%;
+        background-size: 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%;
+    }
+}
+
+footer button:hover::after {
+    bottom: -70%;
+    background-image: radial-gradient(circle, red 20%, transparent 20%),
+        radial-gradient(circle, red 20%, transparent 20%),
+        radial-gradient(circle, transparent 10%, red 15%, transparent 20%),
+        radial-gradient(circle, red 20%, transparent 20%),
+        radial-gradient(circle, red 20%, transparent 20%),
+        radial-gradient(circle, red 20%, transparent 20%),
+        radial-gradient(circle, red 20%, transparent 20%);
+    background-size: 15% 15%, 20% 20%, 18% 18%, 20% 20%, 15% 15%, 20% 20%, 18% 18%;
+    background-position: 50% 0%;
+    animation: redbottomBubbles 0.6s ease;
+}
+
+@keyframes redbottomBubbles {
+    0% {
+        background-position: 10% -10%, 30% 10%, 55% -10%, 70% -10%, 85% -10%,
+            70% -10%, 70% 0%;
+    }
+
+    50% {
+        background-position: 0% 80%, 20% 80%, 45% 60%, 60% 100%, 75% 70%, 95% 60%,
+            105% 0%;
+    }
+
+    100% {
+        background-position: 0% 90%, 20% 90%, 45% 70%, 60% 110%, 75% 80%, 95% 70%,
+            110% 10%;
+        background-size: 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%;
+    }
 }
