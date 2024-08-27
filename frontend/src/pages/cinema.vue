@@ -24,7 +24,7 @@ export default {
         };
 
         const goToChooseseat = () => {
-            router.push({ name: 'ChooseSeat', params: { id: route.params.id } }); // Navega a la página de asientos con el id de la película
+            router.push({ name: 'ChooseSeat', params: { id: route.params.id } }); // Navegamos a la página de asientos con el id de la película
         };
 
         
@@ -59,40 +59,26 @@ export default {
         <div class="castzone">
             <h3 class="whitetext">Cast</h3>
             <div class="cast">
-                <div class="castperson">
+
+                <div class="castperson" v-for="(castpersona, index) in pelicula.cast" :key="index">
                     <div class="castpersonimg">
-                        <img src="/frontend/public/assets/images/antonio.jpg">
+                        <img :src="castpersona.img">
                     </div>
                     <div class="castpersoninfo">
-                        <strong class="whitetext">Antonio Banderas</strong>
-                        <p class="graytext">Puss in Boots</p>
+                        <strong class="whitetext">{{ castpersona.nombre }}</strong>
+                        <p class="graytext">{{ castpersona.rol }}</p>
                     </div>
                 </div>
-                <div class="castperson">
-                    <div class="castpersonimg">
-                        <img src="/frontend/public/assets/images/antonio.jpg">
-                    </div>
-                    <div class="castpersoninfo">
-                        <strong class="whitetext">Antonio Banderas</strong>
-                        <p class="graytext">Puss in Boots</p>
-                    </div>
-                </div>
-                <div class="castperson">
-                    <div class="castpersonimg">
-                        <img src="/frontend/public/assets/images/antonio.jpg">
-                    </div>
-                    <div class="castpersoninfo">
-                        <strong class="whitetext">Antonio Banderas</strong>
-                        <p class="graytext">Puss in Boots</p>
-                    </div>
-                </div>
+
             </div>
         </div>
 
         <div class="cinemazone">
             <h3 class="whitetext">Cinema</h3>
+
             <div class="cinemas">
-                <div class="cinemark">
+
+                <div class="cinemark" >
                     <div class="cinemarkinfo">
                         <strong class="whitetext">Cinemark Caracoli</strong>
                         <p class="graytext">Centro Comercial Caracolí, Tv. El Bosque #29-145 local 508, Cañaveral, Floridablanca, Santander</p>
@@ -101,6 +87,7 @@ export default {
                         <img src="/frontend/public/assets/images/cinemarklogo.jpg" >
                     </div>
                 </div>
+
                 <div class="cinecolombia">
                     <div class="cinecolombiainfo">
                         <strong class="whitetext">CineColombia Cañaveral</strong>
@@ -112,6 +99,7 @@ export default {
                     </div>
                 </div>
             </div>
+            
         </div>
 
     </section>
@@ -271,10 +259,24 @@ strong, p {
 
 .cinemark, .cinecolombia {
     display: flex;
-    /* height: 5%; */
     background-color: #2b2b2b;
     padding: 10px;
     border-radius: 10px;
+    transition: 0.5s ease;
+}
+
+.cinemark:hover,:focus {
+  background: #8b1000;
+  border: 1px solid #ffffff;
+  box-shadow: 0 0 3px #ff1e00, 0 0 5px #ff1e00, 0 0 10px #ff1e00,
+    0 0 50px #ff1e00;
+}
+
+.cinecolombia:hover,:focus {
+    background: #11005e;
+    border: 1px solid #ffffff;
+    box-shadow: 0 0 5px #2f00ff, 0 0 5px #2f00ff, 0 0 10px #2f00ff,
+    0 0 50px #2f00ff;
 }
 
 .cinemarkinfo p, .cinecolombiainfo p {

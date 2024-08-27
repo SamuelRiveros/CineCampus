@@ -1,12 +1,14 @@
 <script>
 import { ref, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 export default {
   name: "ChooseSeat",
 
   setup() {
     const route = useRoute();
+    const router = useRouter()
+
     const pelicula = ref(null);
 
     const fetchPelicula = async () => {
@@ -21,10 +23,15 @@ export default {
         console.error('Error al obtener los detalles de la película:', error);
       }
     };
+    const gotoOrder = () => {
+            router.push({ name: 'Order', params: { id: route.params.id } }); // Navegamos a la página de order con el id de la película
+    };
 
     onMounted(fetchPelicula);
 
-    return { pelicula };
+    return { pelicula, gotoOrder };
+
+
   },
 
   data() {
@@ -161,7 +168,7 @@ export default {
               <strong>$24,99</strong>
             </div>
   
-            <button type="submit">Buy Ticket</button>
+            <button type="submit" @click="gotoOrder()">Buy Ticket</button>
           </footer>
         </form>
   
@@ -193,7 +200,13 @@ export default {
   header {
       display: flex;
       justify-content: space-between;
+      align-items: center;
       padding: 30px;
+  }
+
+  header img {
+    fill: white;
+    width: 10%;
   }
   
   .whitetext {

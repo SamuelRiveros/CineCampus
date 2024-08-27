@@ -1,8 +1,42 @@
+<script>
+import { ref, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
+
+    export default {
+    name: 'Ticket',
+    props: ['id'],
+
+    setup() {
+        const route = useRoute();
+
+        const pelicula = ref(null);
+
+        const fetchPelicula = async () => {
+            try {
+                const response = await fetch(`http://localhost:3001/api/getmoviebyid/${route.params.id}`);
+                if (!response.ok) {
+                throw new Error('Error fetching movie');
+                }
+                const data = await response.json();
+                pelicula.value = data.data; // Guardamos los datos de la película
+            } catch (error) {
+                console.error('Error al obtener los detalles de la película:', error);
+            }
+        };
+
+        onMounted(fetchPelicula);
+        return { pelicula };
+    }
+    };
+</script>
+
+
+
 <template>
-  <div class="bodyticket">
+<div class="bodyticket" v-if="pelicula">
     <header>
-        <div class="ordermainheader">
-            <img src="/frontend/public/assets/icons/back.svg" class="back">
+        <div class="ticketmainheader">
+            <img src="/frontend/public/assets/icons/back.svg" class="back" @click="$router.go(-1)">
             <h3 class="whitetext">Ticket</h3>
             <img src="/frontend/public/assets/icons/threedots.svg" class="dots">
         </div>
@@ -12,11 +46,11 @@
         <div class="MainTicket">
             <div class="movieimgcinema">
                 <div class="imgcinema">
-                    <img src="/frontend/public/assets/images/movieplaceholder.png">
+                    <img :src="pelicula.img">
                 </div>
             </div>
             <div class="moviedata">
-                <h3>Movie Title Goes Here</h3>
+                <h3>{{ pelicula.titulo }}</h3>
                 <p class="graytext">Show this ticket to the entrance</p>
             </div>
     
@@ -66,7 +100,10 @@
             </div>
         </div>
     </div>
-  </div>
+</div>
+<div v-else>
+    <p>Loading Ticket. . .</p>
+</div>
 </template>
 
 <style scoped>
@@ -94,11 +131,17 @@
     color: gray;
 }
 
-header .ordermainheader {
+header .ticketmainheader {
     display: flex;
     width: 100%;
     justify-content: space-between;
+    align-items: center;
     padding: 10%;
+}
+
+.ticketmainheader img {
+    fill: white;
+    width: 10%;
 }
 
 
@@ -228,8 +271,3 @@ header .ordermainheader {
 }
 
 </style>
-<script>
-    export default {
-    name: 'Ticket',
-    };
-</script>

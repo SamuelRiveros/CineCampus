@@ -1,25 +1,59 @@
 <script>
-    export default {
+import { ref, onMounted } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+
+export default {
     name: 'Order',
-    };
+    props: ['id'],
+    
+    setup() {
+        const route = useRoute();
+        const router = useRouter()
+
+        const pelicula = ref(null);
+
+        const fetchPelicula = async () => {
+            try {
+                const response = await fetch(`http://localhost:3001/api/getmoviebyid/${route.params.id}`);
+                if (!response.ok) {
+                throw new Error('Error fetching movie');
+                }
+                const data = await response.json();
+                pelicula.value = data.data; // Guardamos los datos de la película
+            } catch (error) {
+                console.error('Error al obtener los detalles de la película:', error);
+            }
+        };
+
+        const gotoTicket = () => {
+            router.push({ name: 'Ticket', params: { id: route.params.id } }); // Navegamos a la página de order con el id de la película
+        };
+
+        onMounted(fetchPelicula);
+        return { pelicula, gotoTicket };
+        
+    }
+
+};
+
 </script>
 
 <template>
-    <div class="bodyorder">
+    <div class="bodyorder" v-if="pelicula">
         <header>
             <div class="ordermainheader">
-                <img src="/frontend/public/assets/icons/back.svg" class="back">
+                <img src="/frontend/public/assets/icons/back.svg" class="back" @click="$router.go(-1)">
                 <h3 class="whitetext">Order Summary</h3>
                 <img src="/frontend/public/assets/icons/threedots.svg" class="dots">
             </div>
 
             <div class="moviesummaryimgzone">
-                <img src="/frontend/public/assets/images/movieplaceholder.png">
+                <img :src="pelicula.img">
 
                 <div class="moviesummarytext">
                     <div class="moviesummaryinformation">
-                        <strong class="redtext">Movie Title Goes Here</strong>
-                        <p class="graytext">Genre goes here</p>
+                        <strong class="redtext">{{ pelicula.titulo }}</strong>
+                        <p class="graytext">{{ pelicula.genero }}</p>
                     </div>
 
                     <div class="moviesummarylocation">
@@ -32,7 +66,7 @@
         </header>
 
         <div class="ordernumber">
-            <span class="graytext">Order Number: </span><span class="whitetext">123456789</span>.
+            <span class="graytext">Order Number: </span><span class="whitetext">-|- {{ pelicula._id }}</span>.
         </div>
 
         <section class="ordermain">
@@ -70,9 +104,12 @@
         </div>
 
         <footer>
-            <button class="buyticket">Buy Ticket</button>
+            <button class="buyticket" @click="gotoTicket()">Buy Ticket</button>
         </footer>
     </div>
+    <div v-else>
+    <p>Loading Order. . .</p>
+  </div>
 </template>
 
 <style scoped>
@@ -124,7 +161,13 @@ header .ordermainheader {
     display: flex;
     width: 100%;
     justify-content: space-between;
+    align-items: center;
     padding: 5%;
+}
+
+.ordermainheader img {
+    fill: white;
+    width: 10%;
 }
 
 .moviesummaryimgzone {
