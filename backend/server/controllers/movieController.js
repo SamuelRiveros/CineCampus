@@ -41,8 +41,29 @@ const listSpecificMovieDetails = async(req, res) => {
   }
 }
 
+const getMovieById = async (req, res) => {
+  const movieId = req.params.id;
+
+  const peliculaDTO = new PeliculaDTO();
+  const peliculasModel = new Peliculas();
+
+  try {
+
+    const movie = await peliculasModel.getmovieById(movieId)
+
+    if (!movie) {
+      return res.status(404).json(peliculaDTO.templateNotMovies());
+    }
+
+    return res.status(200).json(peliculaDTO.templateListMovies(movie));
+  } catch (error) {
+    res.status(500).json(peliculaDTO.templateMovieError());
+  }
+}
+
 
 module.exports = {
   listAllMovies,
-  listSpecificMovieDetails
+  listSpecificMovieDetails,
+  getMovieById
 };

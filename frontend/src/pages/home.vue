@@ -1,5 +1,6 @@
 <script>
 import { ref, onMounted, reactive } from 'vue';
+import { useRouter } from 'vue-router';
 
 export default {
   name: 'Home',
@@ -8,6 +9,8 @@ export default {
     const usuario = ref({});
     const activeIndex = ref(0); // Índice de la película actualmente visible
     const scroller = ref(null); // Referencia al contenedor de películas
+
+    const router = useRouter();
 
     // obtener datos de las peliculas
     const fetchPeliculas = async () => {
@@ -50,6 +53,16 @@ export default {
       }
     };
 
+    const goToCinema = (id) => {
+      try {
+        router.push({ name: 'Cinema', params: { id } });
+      } catch(error) {
+        console.error(`Transicion al cinema incorrecta, ${error}`)
+      }
+    };
+
+    
+
     // podemos agregar un event listener para el scroll en el movie scroller
     onMounted(() => {
       fetchPeliculas();
@@ -60,7 +73,7 @@ export default {
       }
     });
 
-    return { peliculas, usuario, activeIndex, scroller, scrollToMovie };
+    return { peliculas, usuario, activeIndex, scroller, scrollToMovie, goToCinema };
   }
 };
 </script>
@@ -93,14 +106,13 @@ export default {
 
       <div class="movie-scroller" ref="scroller">
         
-        <div class="movie" v-for="(pelicula, index) in peliculas" :key="pelicula.id">
+        <div class="movie" v-for="(pelicula, index) in peliculas"  @click="goToCinema(pelicula._id)">
 
           <img :src="pelicula.img" alt="Imagen de la película" />
-          <div class="movieDetails">
 
+          <div class="movieDetails">
             <h3 class="whitetext">{{ pelicula.titulo }}</h3>
             <p>{{ pelicula.genero }}</p>
-            
           </div>
         </div>
       </div>

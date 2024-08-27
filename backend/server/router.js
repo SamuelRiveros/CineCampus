@@ -4,13 +4,16 @@ const path = require('path');
 //user
 const userController = require('./controllers/userController');
 
-const { listAllMovies, listSpecificMovieDetails } = require('./controllers/movieController');
+const { listAllMovies, listSpecificMovieDetails, getMovieById } = require('./controllers/movieController');
 const { peliculaValidationEmpty, peliculalistingSpecifications } = require('./validators/movieValidator');
 
 // seccion peliculas
 
 //Listar todas las pelis en catalogo
 router.get("/getallmovies", peliculaValidationEmpty(), listAllMovies);
+
+router.get("/getmoviebyid/:id", peliculaValidationEmpty(), getMovieById)
+
 //Listar pelicula con datos en especifico
 router.get("/getspecificmovie", peliculalistingSpecifications(), listSpecificMovieDetails)
 

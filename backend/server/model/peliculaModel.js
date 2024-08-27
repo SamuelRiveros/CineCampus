@@ -70,5 +70,16 @@ class Peliculas extends Connect {
         let res = await this.collection.findOne(moviedetails)
         return res;
     }
+
+    async getmovieById(movieId) {
+        try {
+            let res = await this.collection.findOne({ _id: new ObjectId(movieId) });
+            return res;
+        } catch (error) {
+            console.error('Error fetching movie:', error);
+            throw new Error('Error fetching movie');
+        }
+    }
+    
 }
 module.exports = Peliculas

@@ -1,7 +1,45 @@
+<script>
+
+import {ref, onMounted} from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+
+export default {
+    name: 'Cinema',
+    props: ['id'],
+    
+    setup() {
+        const route = useRoute();
+        const router = useRouter();
+
+        const pelicula = ref(null);
+
+        const fetchPelicula = async () => {
+            try {
+                const response = await fetch(`http://localhost:3001/api/getmoviebyid/${route.params.id}`);
+                const data = await response.json();
+                pelicula.value = data.data;
+            } catch (error) {
+                console.error('Error al obtener los detalles de la película:', error);
+            }
+        };
+
+        const goToChooseseat = () => {
+            router.push({ name: 'ChooseSeat', params: { id: route.params.id } }); // Navega a la página de asientos con el id de la película
+        };
+
+        
+        onMounted(fetchPelicula);
+
+        return { pelicula, goToChooseseat };
+
+    }
+};
+</script>
+
 <template>
-  <div class="cinemabody">
+  <div class="cinemabody" v-if="pelicula">
     <header>
-        <img src="/frontend/public/assets/icons/back.svg" class="back">
+        <img src="/frontend/public/assets/icons/back.svg" class="back" @click="$router.go(-1)">
         <h3>Cinema Selection</h3>
         <img src="/frontend/public/assets/icons/threedots.svg" class="dots">
     </header>
@@ -9,13 +47,13 @@
     <section class="bodycinema">
         <div class="movieimgcinema">
             <div class="imgcinema">
-                <img src="/frontend/public/assets/images/movieplaceholder.png">
+                <img :src="pelicula.img">
             </div>
         </div>
         <div class="moviedata">
-            <h3 class="whitetext">Movie Title Goes Here</h3>
-            <small class="graytext">Action, Adventure thing goes here</small>
-            <p class="graytext">Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam, unde, eaque recusandae repudiandae ratione a dignissimos doloribus praesentium eveniet inventore nemo. Earum eos voluptate debitis? Nisi obcaecati reiciendis sunt fugiat?</p>
+            <h3 class="whitetext">{{pelicula.titulo}}</h3>
+            <small class="graytext">{{ pelicula.genero }}</small>
+            <p class="graytext">{{ pelicula.descripcion }}</p>
         </div>
 
         <div class="castzone">
@@ -78,8 +116,11 @@
 
     </section>
     <footer>
-        <button class="booknow">Book Now</button>
+        <button class="booknow" @click="goToChooseseat()">Book Now</button>
     </footer>
+  </div>
+  <div v-else>
+    <p>Loading Movie. . .</p>
   </div>
 </template>
 
@@ -364,9 +405,3 @@ footer button:hover::after {
 }
 
 </style>
-  
-<script>
-    export default {
-    name: 'Cinema',
-    };
-</script>
