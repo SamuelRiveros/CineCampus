@@ -12,7 +12,11 @@ export default {
 
         const pelicula = ref(null);
 
-        const selectedCinema = ref(sessionStorage.getItem('selectedCinema')); // Recupera el cine seleccionado de sessionStorage
+        const selectedCinema = ref(sessionStorage.getItem('selectedCinema')); // Recuperamos el cine seleccionado de sessionStorage
+        const selectedSeatsStorage = ref(sessionStorage.getItem('selectedSeats')); // Recuperamos el cine seleccionado de sessionStorage
+
+        const selectedDayStorage = sessionStorage.getItem("selectedDay")
+        const selectedHourStorage = sessionStorage.getItem("selectedHour")
 
         const fetchPelicula = async () => {
             try {
@@ -33,7 +37,15 @@ export default {
 
         onMounted(fetchPelicula);
 
-        return { pelicula, selectedCinema, gotoTicket };
+        return {
+            pelicula,
+            selectedCinema,
+            selectedSeatsStorage,
+            selectedHourStorage,
+            selectedDayStorage,
+
+            gotoTicket
+        };
         
     }
 
@@ -61,7 +73,7 @@ export default {
 
                     <div class="moviesummarylocation">
                         <strong class="whitetext">{{ selectedCinema }}</strong>
-                        <p class="graytext">Día | NroDía Mes Año | Hora</p>
+                        <p class="graytext">{{ selectedDayStorage }}, {{ selectedHourStorage }}</p>
                     </div>
 
                 </div>
@@ -69,14 +81,14 @@ export default {
         </header>
 
         <div class="ordernumber">
-            <span class="graytext">Order Number: </span><span class="whitetext">-|- {{ pelicula._id }}</span>.
+            <span class="graytext">Order Number: </span><span class="whitetext">-| {{ pelicula._id }}</span>.
         </div>
 
         <section class="ordermain">
             <div class="order-summary">
                 <div class="order-row">
                 <span class="left">1 Ticket</span>
-                <span class="right">C5</span>
+                <span class="right">{{ selectedSeatsStorage }}</span>
                 </div>
                 <div class="order-row">
                 <span class="left">Regular Seat</span>

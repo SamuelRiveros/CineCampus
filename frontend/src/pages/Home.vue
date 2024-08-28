@@ -300,7 +300,7 @@ export default {
 }
 
 .dot.active {
-  background-color: #717171;
+  background-color: #ff0000;
 }
 
 /* Coming Soon */

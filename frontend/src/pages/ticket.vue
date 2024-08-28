@@ -13,6 +13,11 @@ import { useRoute } from 'vue-router';
 
         const selectedCinema = ref(sessionStorage.getItem('selectedCinema')); // Recupera el cine seleccionado de sessionStorage
 
+        const selectedSeatsStorage = ref(sessionStorage.getItem('selectedSeats')); // Recuperamos el cine seleccionado de sessionStorage
+
+        const selectedDayStorage = sessionStorage.getItem("selectedDay")
+        const selectedHourStorage = sessionStorage.getItem("selectedHour")
+
         const cinemaLogo = ref(''); // Variable para el logo del cine
 
         const fetchPelicula = async () => {
@@ -35,7 +40,14 @@ import { useRoute } from 'vue-router';
         });
 
 
-        return { pelicula, selectedCinema, cinemaLogo };
+        return { 
+            pelicula, 
+            selectedCinema, 
+            selectedSeatsStorage,
+            selectedDayStorage,
+            selectedHourStorage,
+            cinemaLogo 
+        };
     }
     };
 </script>
@@ -78,11 +90,11 @@ import { useRoute } from 'vue-router';
                 <div class="ticket-info">
                     <div class="row">
                         <div class="label">Date</div>
-                        <div class="content">Sun, Feb 12th 2023</div>
+                        <div class="content">{{selectedDayStorage}}</div>
                     </div>
                     <div class="row">
                         <div class="label">Time</div>
-                        <div class="content">13:00</div>
+                        <div class="content">{{selectedHourStorage}}</div>
                     </div>
                     <div class="row">
                         <div class="label">Cinema Hall</div>
@@ -90,15 +102,15 @@ import { useRoute } from 'vue-router';
                     </div>
                     <div class="row">
                         <div class="label">Seat</div>
-                        <div class="content">C5</div>
+                        <div class="content">{{selectedSeatsStorage}}</div>
                     </div>
                     <div class="row">
                         <div class="label">Cost</div>
                         <div class="content">$26.99</div>
                     </div>
                     <div class="row">
-                        <div class="label">Order ID</div>
-                        <div class="content">123456789</div>
+                        <div class="label">Ticket ID</div>
+                        <div class="content" style="text-wrap: wrap;">{{pelicula._id}}</div>
                     </div>
                 </div>
                 
@@ -263,6 +275,7 @@ header .ticketmainheader {
 }
 
 .content {
+    width: 100px;
     font-size: 16px; /* Tamaño más grande para el contenido, pero aún adecuado para móviles */
     color: #000; /* Color de texto más oscuro */
     text-align: left; /* Alineación del texto a la izquierda */
