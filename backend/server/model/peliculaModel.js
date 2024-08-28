@@ -95,13 +95,44 @@ class Peliculas extends Connect {
 
     async getmovieById(movieId) {
         try {
-            let res = await this.collection.findOne({ _id: new ObjectId(movieId) });
-            return res;
+            const pelicula = await this.collection.aggregate([
+                {
+                    $match: { _id: new ObjectId(movieId) }
+                },
+                {
+                    $lookup: {
+                        from: "funcion",         // Nombre de la colección a unir
+                        localField: "_id",       // La id de la película de la colección "pelicula"
+                        foreignField: "Pelicula_id", // Campo de la colección "funcion" para la unión
+                        as: "funciones"          // Nombre del campo de salida con los datos unidos
+                    }
+                },
+                {
+                    $project: {
+                        titulo: 1,
+                        genero: 1,
+                        sinopsis: 1,
+                        duracion: 1,
+                        funciones: "$funciones.horario_proyeccion", // Proyectar solo el horario de proyección de la función
+                        img: 1,
+                        cast: 1,
+                        en_catalogo: 1,
+                        trailer: 1
+                    }
+                }
+            ]).toArray();
+    
+            if (pelicula.length === 0) {
+                throw new Error('Película no encontrada');
+            }
+            return pelicula[0];
         } catch (error) {
             console.error('Error fetching movie:', error);
             throw new Error('Error fetching movie');
         }
     }
+    
+
     
 }
 module.exports = Peliculas

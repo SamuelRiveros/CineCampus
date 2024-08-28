@@ -4,8 +4,11 @@ const path = require('path');
 //user
 const userController = require('./controllers/userController');
 
+const BoletaController = require("./controllers/boletaController")
+
 const { listAllMovies, listSpecificMovieDetails, getMovieById } = require('./controllers/movieController');
 const { peliculaValidationEmpty, peliculalistingSpecifications } = require('./validators/movieValidator');
+
 
 // seccion peliculas
 
@@ -26,5 +29,10 @@ router.get('/getusersbyrole', userController.getUsersByRole);
 router.put('/updateuser', userController.updateUser);
 
 
+// seccion boletas
+
+router.post('/buy', BoletaController.buyTicket);
+router.get('/review/:funcionId/:sala', BoletaController.reviewSeats);
+router.delete('/cancel', BoletaController.cancelTicket);
 
 module.exports = router;

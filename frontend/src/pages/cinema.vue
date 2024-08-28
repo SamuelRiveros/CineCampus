@@ -25,7 +25,7 @@ export default {
             }
         };
 
-        //hay que corregir esto
+        
         const watchTrailer = () => {
             window.open(pelicula.value.trailer);
         }

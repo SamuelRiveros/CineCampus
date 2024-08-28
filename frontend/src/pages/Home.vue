@@ -23,7 +23,6 @@ export default {
         peliculasEnCatalogo.value = data.data.peliculasEnCatalogo;
         peliculasComingSoon.value = data.data.peliculasComingSoon;
 
-        // peliculas.value = data.data; // antes tenia esto, y lo mismo con peliculas en la parte de abajo en el scroller
       } catch (error) {
         console.error('Error al obtener datos:', error);
       }

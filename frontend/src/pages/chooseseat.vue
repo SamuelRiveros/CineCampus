@@ -1,5 +1,5 @@
 <script>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 export default {
@@ -9,7 +9,8 @@ export default {
     const route = useRoute();
     const router = useRouter()
 
-    const pelicula = ref(null);
+    const pelicula = ref(null); // Aquí se almacenará la película
+    const selectedDay = ref(null); // Estado para almacenar el día seleccionado
 
     const fetchPelicula = async () => {
       try {
@@ -23,15 +24,37 @@ export default {
         console.error('Error al obtener los detalles de la película:', error);
       }
     };
+
+    // Función para extraer días únicos de las funciones
+    const uniqueDays = computed(() => {
+      if (!pelicula.value || !pelicula.value.funciones) return [];
+      
+      const days = pelicula.value.funciones.map(funcion => {
+        return new Date(funcion).toISOString().split('T')[0]; // Extrae solo la parte de la fecha
+      });
+
+      return [...new Set(days)]; // Remueve días duplicados
+    });
+
+    // Computed para obtener las horas correspondientes al día seleccionado
+    const hoursForSelectedDay = computed(() => {
+      if (!pelicula.value || !pelicula.value.funciones || !selectedDay.value) return [];
+
+      return pelicula.value.funciones
+        .filter(funcion => new Date(funcion).toISOString().split('T')[0] === selectedDay.value)
+        .map(funcion => new Date(funcion).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })); // Formato HH:mm
+    });
+
     
     const gotoOrder = () => {
             router.push({ name: 'Order', params: { id: route.params.id } }); // Navegamos a la página de order con el id de la película
     };
 
-    onMounted(fetchPelicula);
+    onMounted(() => {
+      fetchPelicula()
+    })
 
-    return { pelicula, gotoOrder };
-
+    return { uniqueDays, hoursForSelectedDay, selectedDay, pelicula, gotoOrder };
 
   },
 
@@ -174,14 +197,23 @@ export default {
         </form>
   
         <div class="funciondata">
-          <section class="day">
-            <p>Aug</p>
-            <strong>17</strong>
-          </section>
-  
-          <section class="time">
-            <p>10:00</p>
-          </section>
+
+          <div class="daycarousel">
+            
+            <div class="day" v-for="(day, index) in uniqueDays" :key="index" @click="selectedDay = day" :class="{ active: selectedDay === day }">
+              <p>{{ new Date(day).toLocaleDateString() }}</p> <!-- Mostramos el día en formato legible -->
+              <strong>{{ new Date(day).toLocaleDateString('es-ES', { weekday: 'long' }) }}</strong> <!-- Mostrar nombre del día -->
+            </div>
+
+          </div>
+
+          <div class="timecarousel" v-for="(hour, index) in hoursForSelectedDay" :key="index">
+
+            <div class="time">
+              <p>{{ hour }}</p>
+            </div>
+
+          </div>
         </div>
       </section>
     </div>
@@ -368,16 +400,44 @@ export default {
       padding-top: 20px;
       gap: 30px;
   }
+
+  .daycarousel {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    width: 100%;
+  }
   
-  .funciondata .day {
-      background-color: white;
-      border-radius: 10px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-evenly;
-      align-items: center;
-      width: 50px;
-      height: 70px;
+  .day {
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 10px;
+    padding: 10px;
+    border: 1px solid #ffffff;
+    margin: 5px;
+    transition: background-color 0.3s;
+  }
+
+  .day.active {
+    background-color: #ffffff; /* Cambia al color que desees para el estado activo */
+    color: rgb(0, 0, 0);
+  }
+
+  .time {
+    cursor: pointer;
+    padding: 10px;
+    border: 1px solid #ccc;
+    margin: 5px;
+  }
+
+  .timecarousel {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    width: 100%;
   }
   
   .funciondata .time {
