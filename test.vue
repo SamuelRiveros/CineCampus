@@ -19,7 +19,7 @@ export default {
     const fetchPeliculas = async () => {
       try {
         const response = await fetch('http://localhost:3001/api/getallmovies');
-        const data = await response.json();   
+        const data = await response.json();
         peliculasEnCatalogo.value = data.data.peliculasEnCatalogo;
         peliculasComingSoon.value = data.data.peliculasComingSoon;
 
@@ -80,7 +80,7 @@ export default {
   }
 };
 </script>
-  
+
 
 
 <template>
@@ -135,21 +135,15 @@ export default {
           <h3 class="whitetext">Coming Soon</h3>
           <p class="redtext">See all</p>
         </div>
-
         <div class="comingsoonmovie">
-          
           <div class="comingsoonmovieplace" v-for="(pelicula, index) in peliculasComingSoon" :key="pelicula._id">
-            <div class="comingsoonmovieimg">
-              <img :src="pelicula.img"/>
-            </div>
+            <img :src="pelicula.img"/>
             <div class="comingsoonMovieDetails">
               <h3 class="whitetext">{{ pelicula.titulo }}</h3>
               <p class="whitetext">{{ pelicula.genero }}</p>
             </div>
           </div>
-
         </div>
-        
       </div>
     </section>
 
@@ -162,9 +156,6 @@ export default {
   </div>
 </template>
 
-
-
-
 <style scoped>
 
 .bodyhome {
@@ -172,7 +163,7 @@ export default {
   padding-bottom: 80px;
   margin: 0;
   overflow-x: hidden;
-  
+  overflow-y: hidden;
   font-family: 'Arial', sans-serif;
 }
 
@@ -320,9 +311,7 @@ export default {
 
 .comingsoonmovie {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
+  justify-content: center;
 }
 
 .comingsoonmovieplace {
@@ -332,22 +321,6 @@ export default {
   width: 85%;
   padding: 10px;
   gap: 10px;
-}
-
-.comingsoonmovieimg {
-  width: 100px;
-  height: 80px;
-  overflow: hidden;
-  border-radius: 10px;
-}
-
-.comingsoonmovieplace img {
-  width: 100%;
-  max-width: 100%;
-  object-fit: cover;
-
-  position: relative;
-  bottom: 20px;
 }
 
 footer {
@@ -375,4 +348,4 @@ footer img:hover {
   opacity: 0.8;
   transition: opacity 0.3s ease;
 }
-</style>  
+</style>

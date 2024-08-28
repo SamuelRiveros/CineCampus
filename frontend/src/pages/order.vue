@@ -12,6 +12,8 @@ export default {
 
         const pelicula = ref(null);
 
+        const selectedCinema = ref(sessionStorage.getItem('selectedCinema')); // Recupera el cine seleccionado de sessionStorage
+
         const fetchPelicula = async () => {
             try {
                 const response = await fetch(`http://localhost:3001/api/getmoviebyid/${route.params.id}`);
@@ -30,7 +32,8 @@ export default {
         };
 
         onMounted(fetchPelicula);
-        return { pelicula, gotoTicket };
+
+        return { pelicula, selectedCinema, gotoTicket };
         
     }
 
@@ -57,7 +60,7 @@ export default {
                     </div>
 
                     <div class="moviesummarylocation">
-                        <strong class="whitetext">Cinemark Caracoli</strong>
+                        <strong class="whitetext">{{ selectedCinema }}</strong>
                         <p class="graytext">Día | NroDía Mes Año | Hora</p>
                     </div>
 

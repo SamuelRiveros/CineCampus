@@ -11,6 +11,10 @@ import { useRoute } from 'vue-router';
 
         const pelicula = ref(null);
 
+        const selectedCinema = ref(sessionStorage.getItem('selectedCinema')); // Recupera el cine seleccionado de sessionStorage
+
+        const cinemaLogo = ref(''); // Variable para el logo del cine
+
         const fetchPelicula = async () => {
             try {
                 const response = await fetch(`http://localhost:3001/api/getmoviebyid/${route.params.id}`);
@@ -24,8 +28,14 @@ import { useRoute } from 'vue-router';
             }
         };
 
-        onMounted(fetchPelicula);
-        return { pelicula };
+        onMounted(() => {
+            fetchPelicula();
+            // Recuperar el logo del cine desde sessionStorage
+            cinemaLogo.value = sessionStorage.getItem('selectedCinemaLogo');
+        });
+
+
+        return { pelicula, selectedCinema, cinemaLogo };
     }
     };
 </script>
@@ -58,10 +68,10 @@ import { useRoute } from 'vue-router';
                 <div class="cinemainfo">
                     <div class="cinemainfotext">
                         <p>Cinema</p>
-                        <strong>Cinemark Caracoli</strong>
+                        <strong>{{ selectedCinema }}</strong>
                     </div>
-                    <div class="cinemarklogo">
-                        <img src="/frontend/public/assets/images/cinemarklogo.jpg">
+                    <div class="cinemalogo">
+                        <img :src="cinemaLogo">
                     </div>
                 </div>
     
@@ -211,7 +221,7 @@ header .ticketmainheader {
     justify-content: space-around;
 }
 
-.cinemarklogo {
+.cinemalogo {
     border: 1px solid #333333;
     width: 60px; /* Debe ser el mismo tamaño que el contenedor */
     height: 50px; /* Mismo valor que el ancho para mantener el círculo */
@@ -222,7 +232,7 @@ header .ticketmainheader {
     align-items: center;
 }
 
-.cinemarklogo img{
+.cinemalogo img{
     width: 100%; /* Ocupa todo el tamaño del contenedor */
     height: 100%;
     object-fit: cover; /* Asegura que la imagen cubra el contenedor */

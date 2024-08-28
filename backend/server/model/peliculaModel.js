@@ -31,7 +31,7 @@ class Peliculas extends Connect {
 
     async listAllMovies() {
 
-        let res = await this.collection.aggregate([
+        const peliculasEnCatalogo = await this.collection.aggregate([
             { $match: { en_catalogo: true } }, //! validacion que consiste en que se filtren solo las que estén en catalogo
                 {
                   $lookup: {
@@ -55,8 +55,30 @@ class Peliculas extends Connect {
                 }
               ]).toArray();
 
+              const peliculasComingSoon = await this.collection.aggregate([
+                { $match: { en_catalogo: false } }, //! validacion que consiste en que se filtren solo las que estén en catalogo
+                    {
+                      $lookup: {
+                        from: "funcion", //* Nombre de la colección a unir
+                        localField: "_id", //* La id de la pelicula de la coleccion "pelicula"
+                        foreignField: "Pelicula_id", //* Campo de la colección "funcion" para la unión
+                        as: "funciones" //* Nombre del campo de salida con los datos unidos
+                      }
+                    },
+                    {
+                        $project: {
+                            titulo: 1,
+                            genero: 1,
+                            sinopsis: 1,
+                            duracion: 1,
+                            img: 1,
+                            en_catalogo: 1,
+                            trailer: 1
+                        }
+                    }
+                  ]).toArray();
 
-        return res;
+                  return { peliculasComingSoon, peliculasEnCatalogo}
     }
 
     // API para Obtener Detalles de Película: Permitir la consulta de información detallada sobre una película específica, incluyendo sinopsis.

@@ -18,11 +18,12 @@ export default {
           throw new Error('Error fetching movie');
         }
         const data = await response.json();
-        pelicula.value = data.data; // Guardas los datos de la película
+        pelicula.value = data.data; // Guardamos los datos de la película
       } catch (error) {
         console.error('Error al obtener los detalles de la película:', error);
       }
     };
+    
     const gotoOrder = () => {
             router.push({ name: 'Order', params: { id: route.params.id } }); // Navegamos a la página de order con el id de la película
     };

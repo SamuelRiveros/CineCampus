@@ -8,6 +8,8 @@ export default {
     props: ['id'],
     
     setup() {
+        const selectedCinema = ref(null);
+
         const route = useRoute();
         const router = useRouter();
 
@@ -23,18 +25,39 @@ export default {
             }
         };
 
-        const goToChooseseat = () => {
-            router.push({ name: 'ChooseSeat', params: { id: route.params.id } }); // Navegamos a la página de asientos con el id de la película
+        //hay que corregir esto
+        const watchTrailer = () => {
+            window.open(pelicula.value.trailer);
+        }
+
+        const selectCinema = (cinemaName, element) => {
+            if (element) {
+                const logoUrl = element.querySelector('img').src; // Obtener el src de la imagen
+                selectedCinema.value = cinemaName;
+                sessionStorage.setItem('selectedCinema', cinemaName); // Guarda el cine seleccionado en sessionStorage
+                sessionStorage.setItem('selectedCinemaLogo', logoUrl);
+            } else {
+                console.error('Elemento no encontrado');
+            }
         };
 
-        
-        onMounted(fetchPelicula);
 
-        return { pelicula, goToChooseseat };
+        const goToChooseseat = () => {
+            router.push({ name: 'ChooseSeat', params: { id: route.params.id } });
+        };
+        
+        onMounted(() => {
+            fetchPelicula()
+            // podemos agregar más cosas cuando la pag se monte
+        })
+        // onMounted(fetchPelicula);
+
+        return { pelicula, selectCinema, goToChooseseat, watchTrailer };
 
     }
 };
 </script>
+
 
 <template>
   <div class="cinemabody" v-if="pelicula">
@@ -51,10 +74,15 @@ export default {
             </div>
         </div>
         <div class="moviedata">
-            <h3 class="whitetext">{{pelicula.titulo}}</h3>
-            <small class="graytext">{{ pelicula.genero }}</small>
-            <p class="graytext">{{ pelicula.descripcion }}</p>
+            <div class="moviedatabox">
+                <h3 class="whitetext">{{pelicula.titulo}}</h3>
+                <small class="graytext">{{ pelicula.genero }}</small>
+                <p class="graytext">{{ pelicula.descripcion }}</p>
+            </div>
+
+            <button class="watchtrailer" @click="watchTrailer()">¡ Watch Trailer !</button>
         </div>
+
 
         <div class="castzone">
             <h3 class="whitetext">Cast</h3>
@@ -78,7 +106,7 @@ export default {
 
             <div class="cinemas">
 
-                <div class="cinemark" >
+                <div class="cinemark" @click="selectCinema('Cinemark Caracoli', $event.target.closest('.cinemark'))">
                     <div class="cinemarkinfo">
                         <strong class="whitetext">Cinemark Caracoli</strong>
                         <p class="graytext">Centro Comercial Caracolí, Tv. El Bosque #29-145 local 508, Cañaveral, Floridablanca, Santander</p>
@@ -88,7 +116,7 @@ export default {
                     </div>
                 </div>
 
-                <div class="cinecolombia">
+                <div class="cinecolombia" @click="selectCinema('CineColombia Cañaveral', $event.target.closest('.cinecolombia'))">
                     <div class="cinecolombiainfo">
                         <strong class="whitetext">CineColombia Cañaveral</strong>
                         <p class="graytext">Centro Comercial Cañaveral, Cl. 30 #25-71, Bucaramanga, Floridablanca, Santander</p>
@@ -189,9 +217,21 @@ justify-content: center; /* Centra horizontalmente la imagen dentro de este cont
 
 .moviedata {
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
     padding-top: 10px;
     gap: 5px;
+}
+
+.watchtrailer {
+    height: 35px;
+    background-color: red; /* Color de fondo rojo */
+    color: white; /* Color del texto blanco */
+    border: none; /* Sin borde */
+    padding: 10px; /* Espaciado interno */
+    font-size: 10px; /* Tamaño de fuente */
+    border-radius: 5px; /* Bordes redondeados */
+    cursor: pointer; /* Cursor de mano */
 }
 
 /* Cast */
