@@ -7,9 +7,7 @@ export default {
 
   setup() {
     const pelicula = ref(null);
-
-    const boletas = ref(null)
-
+    const boletas = ref(null);
     const route = useRoute();
     const router = useRouter();
     
@@ -17,7 +15,6 @@ export default {
     const selectedDay = ref(null);
     const selectedHour = ref(null);
 
-    // Función para guardar datos en sessionStorage
     const saveToSessionStorage = () => {
       sessionStorage.setItem('selectedSeats', JSON.stringify(selectedSeats.value));
       sessionStorage.setItem('selectedDay', JSON.stringify(selectedDay.value));
@@ -40,9 +37,6 @@ export default {
     const fetchBoleta = async () => {
       try {
         const response = await fetch(`http://localhost:3001/api/seats`);
-        if (!response.ok) {
-          throw new Error('Error fetching boletas');
-        }
         const data = await response.json();
         boletas.value = data.data;
       } catch (error) {
@@ -104,56 +98,16 @@ export default {
       saveToSessionStorage(); // Guardar en sessionStorage cada vez que se actualice
     };
 
-    const handleSubmit = async () => {
-
+    const handleProceedToOrder = () => {
       // Validar que se ha seleccionado un día, una hora y al menos un asiento
       if (!selectedDay.value || !selectedHour.value || selectedSeats.value.length === 0) {
         alert('Por favor, selecciona un día, una hora y al menos un asiento antes de continuar.');
-        return; // Detener el envío del formulario
+        return; // Detener la navegación si la validación falla
       }
-
-      // Preparar el payload para el POST
-      const payload = {
-        id_cliente: "66b52ab3416d8d97d3409e26", // Cambia esto según tu lógica.
-        asiento: selectedSeats.value, // Usa la selección actual de asientos
-        sala: 1, // Cambia esto según tu lógica.
-        id_funcion: "66a595c6f6f7d62733068ac9", // Cambia esto según tu lógica.
-        fecha: selectedDay.value, // Usa la fecha seleccionada
-        hora: selectedHour.value // Usa la hora seleccionada
-      };
-
-      try {
-        const response = await fetch('http://localhost:3001/api/buy', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(payload)
-        });
-
-        const result = await response.json();
-
-        if (!response.ok) {
-          if (response.status === 409) { // Conflict - Ticket already exists
-            alert(result.errors[0].msg); // Mostrar mensaje de error específico
-          } else {
-            throw new Error('Error buying ticket');
-          }
-        } else {
-          console.log('Ticket bought successfully:', result);
-          gotoOrder();
-        }
-      } catch (error) {
-        console.error('Error buying ticket:', error);
-        alert('El tickete no se ha procesado por que el usuario ya ha comprado un ticket previamente, cambia el id_cliente en las propiedades del payload');
-      }
-    };
-
-
-    const gotoOrder = () => {
+      saveToSessionStorage(); // Guardar en sessionStorage antes de navegar
       router.push({ name: 'Order', params: { id: route.params.id } });
     };
-    
+
     onMounted(() => {
       fetchPelicula();
       fetchBoleta();
@@ -171,7 +125,7 @@ export default {
       selectedDay,
       selectedHour,
       pelicula,
-      handleSubmit, 
+      handleProceedToOrder, 
       toggleSeat,
       isReserved,
       formatDate,
@@ -180,7 +134,6 @@ export default {
   }
 };
 </script>
-
 
 <template>
   <div class="bodychooseseat">
@@ -195,8 +148,7 @@ export default {
         <img src="/frontend/public/assets/images/screenthisway.png" />
       </div>
 
-      <form @submit.prevent="handleSubmit">
-        
+      <form @submit.prevent="handleProceedToOrder">
         <article class="asientos__normal">
           <div fila="1">
             <small class="whitetext">A</small>
@@ -246,7 +198,7 @@ export default {
             <strong>$24,99</strong>
           </div>
 
-          <button type="submit">Buy Ticket</button>
+          <button type="submit">Proceed to Order</button>
         </footer>
       </form>
 
@@ -268,6 +220,8 @@ export default {
     </section>
   </div>
 </template>
+
+
 
 
 <style scoped>

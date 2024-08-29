@@ -3,129 +3,164 @@ import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 export default {
-    name: 'Order',
-    props: ['id'],
-    
-    setup() {
-        const route = useRoute();
-        const router = useRouter()
+  name: "Order",
 
-        const pelicula = ref(null);
+  setup() {
+    const pelicula = ref(null);
+    const route = useRoute();
+    const router = useRouter();
 
-        const selectedCinema = ref(sessionStorage.getItem('selectedCinema')); // Recuperamos el cine seleccionado de sessionStorage
-        const selectedSeatsStorage = ref(sessionStorage.getItem('selectedSeats')); // Recuperamos el cine seleccionado de sessionStorage
+    const selectedSeats = ref(JSON.parse(sessionStorage.getItem('selectedSeats') || '[]'));
+    const selectedDay = ref(JSON.parse(sessionStorage.getItem('selectedDay') || 'null'));
+    const selectedHour = ref(JSON.parse(sessionStorage.getItem('selectedHour') || 'null'));
 
-        const selectedDayStorage = sessionStorage.getItem("selectedDay")
-        const selectedHourStorage = sessionStorage.getItem("selectedHour")
+    const fetchPelicula = async () => {
+      try {
+        const response = await fetch(`http://localhost:3001/api/getmoviebyid/${route.params.id}`);
+        if (!response.ok) {
+          throw new Error('Error fetching movie');
+        }
+        const data = await response.json();
+        pelicula.value = data.data;
+      } catch (error) {
+        console.error('Error al obtener los detalles de la película:', error);
+      }
+    };
 
-        const fetchPelicula = async () => {
-            try {
-                const response = await fetch(`http://localhost:3001/api/getmoviebyid/${route.params.id}`);
-                if (!response.ok) {
-                throw new Error('Error fetching movie');
-                }
-                const data = await response.json();
-                pelicula.value = data.data; // Guardamos los datos de la película
-            } catch (error) {
-                console.error('Error al obtener los detalles de la película:', error);
-            }
-        };
+    const handleBuyTicket = async () => {
+      if (!selectedDay.value || !selectedHour.value || selectedSeats.value.length === 0) {
+        alert('Por favor, selecciona un día, una hora y al menos un asiento antes de continuar.');
+        return;
+      }
 
-        const gotoTicket = () => {
-            router.push({ name: 'Ticket', params: { id: route.params.id } }); // Navegamos a la página de order con el id de la película
-        };
+      const payload = {
+        id_cliente: "66b52ab3416d8d97d3409e26", 
+        asiento: selectedSeats.value, 
+        sala: 1, 
+        id_funcion: "66a595c6f6f7d62733068ac9", 
+        fecha: selectedDay.value, 
+        hora: selectedHour.value 
+      };
 
-        onMounted(fetchPelicula);
+      try {
+        const response = await fetch('http://localhost:3001/api/buy', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
 
-        return {
-            pelicula,
-            selectedCinema,
-            selectedSeatsStorage,
-            selectedHourStorage,
-            selectedDayStorage,
+        const result = await response.json();
 
-            gotoTicket
-        };
-        
-    }
+        if (!response.ok) {
+          if (response.status === 409) { // Conflicto - Ticket already exists
+            alert(result.errors[0].msg); // Mostrar mensaje de error específico
+          } else {
+            throw new Error('Error buying ticket');
+          }
+        } else {
+          console.log('Ticket bought successfully:', result);
+          gotoTicket();
+        }
+      } catch (error) {
+        console.error('Error buying ticket:', error);
+        alert('El ticket no se ha procesado. Por favor, inténtalo de nuevo.');
+      }
+    };
 
+    const gotoTicket = () => {
+      router.push({ name: 'Ticket', params: { id: route.params.id } });
+    };
+
+    onMounted(fetchPelicula);
+
+    return {
+      pelicula,
+      selectedSeats,
+      selectedDay,
+      selectedHour,
+      handleBuyTicket,
+      gotoTicket
+    };
+  }
 };
-
 </script>
 
 <template>
-    <div class="bodyorder" v-if="pelicula">
-        <header>
-            <div class="ordermainheader">
-                <img src="/frontend/public/assets/icons/back.svg" class="back" @click="$router.go(-1)">
-                <h3 class="whitetext">Order Summary</h3>
-                <img src="/frontend/public/assets/icons/threedots.svg" class="dots">
-            </div>
+  <div class="bodyorder" v-if="pelicula">
+    <header>
+      <div class="ordermainheader">
+        <img src="/frontend/public/assets/icons/back.svg" class="back" @click="$router.go(-1)">
+        <h3 class="whitetext">Order Summary</h3>
+        <img src="/frontend/public/assets/icons/threedots.svg" class="dots">
+      </div>
 
-            <div class="moviesummaryimgzone">
-                <img :src="pelicula.img">
+      <div class="moviesummaryimgzone">
+        <img :src="pelicula.img">
 
-                <div class="moviesummarytext">
-                    <div class="moviesummaryinformation">
-                        <strong class="redtext">{{ pelicula.titulo }}</strong>
-                        <p class="graytext">{{ pelicula.genero }}</p>
-                    </div>
+        <div class="moviesummarytext">
+          <div class="moviesummaryinformation">
+            <strong class="redtext">{{ pelicula.titulo }}</strong>
+            <p class="graytext">{{ pelicula.genero }}</p>
+          </div>
 
-                    <div class="moviesummarylocation">
-                        <strong class="whitetext">{{ selectedCinema }}</strong>
-                        <p class="graytext">{{ selectedDayStorage }}, {{ selectedHourStorage }}</p>
-                    </div>
+          <div class="moviesummarylocation">
+            <strong class="whitetext">Cinema</strong>
+            <p class="graytext">{{ selectedDay }}, {{ selectedHour }}</p>
+          </div>
 
-                </div>
-            </div>
-        </header>
-
-        <div class="ordernumber">
-            <span class="graytext">Order Number: </span><span class="whitetext">-| {{ pelicula._id }}</span>.
         </div>
+      </div>
+    </header>
 
-        <section class="ordermain">
-            <div class="order-summary">
-                <div class="order-row">
-                <span class="left">1 Ticket</span>
-                <span class="right">{{ selectedSeatsStorage }}</span>
-                </div>
-                <div class="order-row">
-                <span class="left">Regular Seat</span>
-                <span class="right">$24,99</span>
-                </div>
-                <div class="order-row">
-                <span class="left">Service Fee</span>
-                <span class="right">$1,99</span>
-                </div>
-            </div>
-        </section>
-    
-        <div class="payment">
-            <h3 class="whitetext">Payment Method</h3>
-
-            <div class="payment-method">
-                <img src="/frontend/public/assets/images/mastercardlogo.png" alt="MasterCard Logo" class="card-logo">
-                <div class="card-details">
-                    <span class="card-name">MasterCard</span>
-                    <span class="card-number">**** **** 0998 7865</span>
-                </div>
-            </div>
-
-            <div class="paymentTime">
-                <span class="graytext">Complete your payment in</span>
-                <span class="redtext">tiempo aqui</span>
-            </div>
-        </div>
-
-        <footer>
-            <button class="buyticket" @click="gotoTicket()">Buy Ticket</button>
-        </footer>
+    <div class="ordernumber">
+      <span class="graytext">Order Number: </span><span class="whitetext">-| {{ pelicula._id }}</span>.
     </div>
-    <div v-else>
+
+    <section class="ordermain">
+      <div class="order-summary">
+        <div class="order-row">
+          <span class="left">1 Ticket</span>
+          <span class="right">{{ selectedSeats.join(', ') }}</span>
+        </div>
+        <div class="order-row">
+          <span class="left">Regular Seat</span>
+          <span class="right">$24,99</span>
+        </div>
+        <div class="order-row">
+          <span class="left">Service Fee</span>
+          <span class="right">$1,99</span>
+        </div>
+      </div>
+    </section>
+  
+    <div class="payment">
+      <h3 class="whitetext">Payment Method</h3>
+
+      <div class="payment-method">
+        <img src="/frontend/public/assets/images/mastercardlogo.png" alt="MasterCard Logo" class="card-logo">
+        <div class="card-details">
+          <span class="card-name">MasterCard</span>
+          <span class="card-number">**** **** 0998 7865</span>
+        </div>
+      </div>
+
+      <div class="paymentTime">
+        <span class="graytext">Complete your payment in</span>
+        <span class="redtext">tiempo aqui</span>
+      </div>
+    </div>
+
+    <footer>
+      <button class="buyticket" @click="handleBuyTicket">Buy Ticket</button>
+    </footer>
+  </div>
+  <div v-else>
     <p>Loading Order. . .</p>
   </div>
 </template>
+
 
 <style scoped>
 
