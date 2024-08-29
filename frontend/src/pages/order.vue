@@ -1,5 +1,5 @@
 <script>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onBeforeUnmount, watchEffect } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 export default {
@@ -13,6 +13,10 @@ export default {
     const selectedSeats = ref(JSON.parse(sessionStorage.getItem('selectedSeats') || '[]'));
     const selectedDay = ref(JSON.parse(sessionStorage.getItem('selectedDay') || 'null'));
     const selectedHour = ref(JSON.parse(sessionStorage.getItem('selectedHour') || 'null'));
+
+    // Timer state
+    const timer = ref(10); // Initial timer in seconds
+    let interval = null;
 
     const fetchPelicula = async () => {
       try {
@@ -73,7 +77,28 @@ export default {
       router.push({ name: 'Ticket', params: { id: route.params.id } });
     };
 
-    onMounted(fetchPelicula);
+    const startTimer = () => {
+      timer.value = 10; // Reset timer to 10 seconds
+      if (interval) clearInterval(interval); // Clear any existing intervals
+      interval = setInterval(() => {
+        timer.value--;
+        if (timer.value <= 0) {
+          clearInterval(interval);
+          alert('Se acabó tu tiempo para pagar.');
+          router.go(-1); // Go back
+        }
+      }, 1000);
+    };
+
+    onMounted(() => {
+      fetchPelicula();
+      startTimer();
+    });
+
+    onBeforeUnmount(() => {
+      // Clean up the interval when the component is about to be unmounted
+      if (interval) clearInterval(interval);
+    });
 
     return {
       pelicula,
@@ -81,7 +106,8 @@ export default {
       selectedDay,
       selectedHour,
       handleBuyTicket,
-      gotoTicket
+      gotoTicket,
+      timer
     };
   }
 };
@@ -138,17 +164,9 @@ export default {
     <div class="payment">
       <h3 class="whitetext">Payment Method</h3>
 
-      <div class="payment-method">
-        <img src="/frontend/public/assets/images/mastercardlogo.png" alt="MasterCard Logo" class="card-logo">
-        <div class="card-details">
-          <span class="card-name">MasterCard</span>
-          <span class="card-number">**** **** 0998 7865</span>
-        </div>
-      </div>
-
       <div class="paymentTime">
         <span class="graytext">Complete your payment in</span>
-        <span class="redtext">tiempo aqui</span>
+        <span class="redtext">{{ timer }}</span>
       </div>
     </div>
 

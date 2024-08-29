@@ -1,5 +1,5 @@
 <script>
-import { ref, onMounted, reactive } from 'vue';
+import { ref, onMounted, reactive, computed } from 'vue';
 import { useRouter } from 'vue-router';
 
 export default {
@@ -8,7 +8,7 @@ export default {
     
     const peliculasEnCatalogo = ref([])
     const peliculasComingSoon = ref([])
-
+    const searchTerm =ref('')
     const usuario = ref({});
     const activeIndex = ref(0); // Índice de la película actualmente visible
     const scroller = ref(null); // Referencia al contenedor de películas
@@ -22,6 +22,7 @@ export default {
         const data = await response.json();   
         peliculasEnCatalogo.value = data.data.peliculasEnCatalogo;
         peliculasComingSoon.value = data.data.peliculasComingSoon;
+        console.log(peliculasEnCatalogo.value)
 
       } catch (error) {
         console.error('Error al obtener datos:', error);
@@ -66,6 +67,36 @@ export default {
       }
     };
 
+    // Función para realizar la búsqueda cuando se presiona "Enter"
+    const searchMovies = () => {
+      // Los resultados se actualizan automáticamente porque usamos computed
+      // para filtrar las películas y las películas recomendadas
+    };
+
+    const focusSearch = () => {
+      // Enfocar el campo de búsqueda
+      const input = document.querySelector('.search-movie-cinema');
+      if (input) {
+        input.focus();
+      }
+    };
+
+     // Computed properties para filtrar las películas
+    const filteredPeliculas = computed(() => {
+      const term = searchTerm.value.toLowerCase();
+      return peliculasEnCatalogo.value.filter(pelicula =>
+        term === '' || pelicula.titulo.toLowerCase().includes(term) || 
+         pelicula.genero.toLowerCase().includes(term)
+      );
+    });
+
+    const filteredRecommendedMovies = computed(() => {
+      const term = searchTerm.value.toLowerCase();
+      return recommendedMovies.value.filter(pelicula =>
+        term === '' || pelicula.titulo.toLowerCase().includes(term)
+      );
+    });
+
     onMounted(() => {
       fetchPeliculas();
       fetchUsuario('66b52ab3416d8d97d3409e26');
@@ -75,7 +106,7 @@ export default {
       }
     });
 
-    return {peliculasEnCatalogo, peliculasComingSoon, usuario, activeIndex, scroller, scrollToMovie, goToCinema };
+    return {peliculasEnCatalogo, peliculasComingSoon, usuario, activeIndex, scroller, scrollToMovie, goToCinema, focusSearch, filteredRecommendedMovies, filteredPeliculas, searchTerm };
   }
 };
 </script>
@@ -96,7 +127,7 @@ export default {
 
     <section class="homebody">
       <div class="searchmovie">
-        <input type="text" name="searchmovie" id="searchmoviehome" placeholder="Search movie, genre" />
+        <input type="text" name="searchmovie" id="searchmoviehome" placeholder="Search movie, genre" v-model="searchTerm"/>
       </div>
 
       <div class="nowplaying">
@@ -108,7 +139,7 @@ export default {
 
       <div class="movie-scroller" ref="scroller">
         
-        <div class="movie" v-for="(pelicula, index) in peliculasEnCatalogo"  @click="goToCinema(pelicula._id)">
+        <div class="movie" v-for="(pelicula, index) in filteredPeliculas"  @click="goToCinema(pelicula._id)">
 
           <img :src="pelicula.img" alt="Imagen de la película" />
 
