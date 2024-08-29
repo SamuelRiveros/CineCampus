@@ -59,6 +59,11 @@ class Boletas extends Connect {
     }
     }
 
+    async listBoletas() {
+        let res = await this.collection.find({}).toArray()
+        return res;
+    }
+
     async findTicketsByFunctionAndSala(funcionId, sala) {
     try {
         return await this.collection.find({

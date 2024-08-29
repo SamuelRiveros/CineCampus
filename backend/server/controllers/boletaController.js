@@ -46,47 +46,22 @@ exports.buyTicket = async (req, res) => {
   }
 };
 
-exports.reviewSeats = async (req, res) => {
+exports.listAllBoletas = async (req, res) => {
     // Ejecutar validaciones
-    await Promise.all(BoletaValidator.validateFuncionExists().map(validator => validator.run(req)));
+    await Promise.all(BoletaValidator.boletaValidationEmpty().map(validator => validator.run(req)));
     
-    // Manejar errores de validación
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-    }
-
-    const { funcionId, sala } = req.params;
     const boletaModel = new BoletaModel();
-    const boletaDTO = new BoletaDTO()
+    const boletaDTO = new BoletaDTO();
+    try{
+      const boletas = await boletaModel.listBoletas()
 
-    try {
-        // Validar que la función exista
-        const funcion = await boletaModel.findFunctionById(funcionId);
-        if (!funcion) {
-            return res.status(404).json(boletaDTO.templateBoletaError('Función no encontrada'));
-        }
+      if (boletas.length === 0) {
+        return res.status(404).json(boletaDTO.templateNotBoletas());
+      }
 
-        // Obtener los tickets asociados a la función y sala
-        const tickets = await boletaModel.findTicketsByFunctionAndSala(funcionId, sala);
-
-        // Configurar la matriz de asientos
-        const totalFilas = 10;
-        const totalColumnas = 26;
-        const asientos = Array.from({ length: totalFilas }, () => Array(totalColumnas).fill(0));
-
-        tickets.forEach(ticket => {
-            const filaIndex = ticket.fila - 1;
-            const columnaIndex = ticket.columna.charCodeAt(0) - 65;
-            if (filaIndex < totalFilas && columnaIndex < totalColumnas) {
-                asientos[filaIndex][columnaIndex] = 1;
-            }
-        });
-
-        return res.status(200).json(boletaDTO.templateListBoletas(asientos));
-    } catch (error) {
-        console.error('Error al revisar los asientos:', error);
-        return res.status(500).json(boletaDTO.templateBoletaError(error.message));
+      return res.status(200).json(boletaDTO.templateListBoletas(boletas));
+    }catch(err){
+      return res.status(500).json(boletaDTO.templateBoletaError(err.message));
     }
 };
 

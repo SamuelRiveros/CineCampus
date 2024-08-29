@@ -1,5 +1,4 @@
 const router = require('express').Router();
-const path = require('path');
 
 //user
 const userController = require('./controllers/userController');
@@ -32,7 +31,8 @@ router.put('/updateuser', userController.updateUser);
 // seccion boletas
 
 router.post('/buy', BoletaController.buyTicket);
-router.get('/review/:funcionId/:sala', BoletaController.reviewSeats);
+router.get('/seats', BoletaController.listAllBoletas);
+// router.get('/review/:funcionId/:sala', BoletaController.reviewSeats);
 router.delete('/cancel', BoletaController.cancelTicket);
 
 module.exports = router;

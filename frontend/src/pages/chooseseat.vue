@@ -7,6 +7,9 @@ export default {
 
   setup() {
     const pelicula = ref(null);
+
+    const boletas = ref(null)
+
     const route = useRoute();
     const router = useRouter();
     
@@ -33,6 +36,19 @@ export default {
         console.error('Error al obtener los detalles de la película:', error);
       }
     };
+
+    const fetchBoleta = async () => {
+      try {
+        const response = await fetch(`http://localhost:3001/api/seats`);
+        if (!response.ok) {
+          throw new Error('Error fetching boletas');
+        }
+        const data = await response.json();
+        boletas.value = data.data;
+      } catch (error) {
+        console.error('Error al obtener boletas', error);
+      }
+    }
 
     const uniqueDays = computed(() => {
       if (!pelicula.value || !pelicula.value.funciones) return [];
@@ -67,20 +83,35 @@ export default {
     };
 
     const isReserved = (seat) => {
-      // Lógica para determinar si el asiento está reservado
-      return false; // Cambia esto según sea necesario
+      if (!boletas.value) return false;
+  
+      // Iterar sobre las boletas para verificar si el asiento está reservado
+      return boletas.value.some(boleta => boleta.asiento.includes(seat));
     };
 
     const toggleSeat = (seat) => {
       if (selectedSeats.value.includes(seat)) {
+        // Si el asiento ya está seleccionado, lo quitamos
         selectedSeats.value = selectedSeats.value.filter(s => s !== seat);
       } else {
+        // Si el asiento no está seleccionado y ya hay 5 asientos seleccionados
+        if (selectedSeats.value.length >= 5) {
+          alert('Solo puedes seleccionar hasta 5 asientos.');
+          return;
+        }
         selectedSeats.value.push(seat);
       }
       saveToSessionStorage(); // Guardar en sessionStorage cada vez que se actualice
     };
 
     const handleSubmit = async () => {
+
+      // Validar que se ha seleccionado un día, una hora y al menos un asiento
+      if (!selectedDay.value || !selectedHour.value || selectedSeats.value.length === 0) {
+        alert('Por favor, selecciona un día, una hora y al menos un asiento antes de continuar.');
+        return; // Detener el envío del formulario
+      }
+
       // Preparar el payload para el POST
       const payload = {
         id_cliente: "66b52ab3416d8d97d3409e26", // Cambia esto según tu lógica.
@@ -114,7 +145,7 @@ export default {
         }
       } catch (error) {
         console.error('Error buying ticket:', error);
-        alert('El tickete no se ha procesado por que el usuario ya ha comprado un ticket previamente');
+        alert('El tickete no se ha procesado por que el usuario ya ha comprado un ticket previamente, cambia el id_cliente en las propiedades del payload');
       }
     };
 
@@ -125,6 +156,7 @@ export default {
     
     onMounted(() => {
       fetchPelicula();
+      fetchBoleta();
     });
 
     // Observadores para actualizar sessionStorage cuando cambian las selecciones
@@ -171,7 +203,7 @@ export default {
             <div class="asientos__lista">
               <div v-for="(seat, index) in ['A1', 'A2', 'A3', 'A4', 'A5']" :key="seat" 
                    :class="['seat', { 'selected': selectedSeats.includes(seat), 'reserved': isReserved(seat) }]" 
-                   @click="toggleSeat(seat)">
+                   @click="isReserved(seat) ? null : toggleSeat(seat)">
                 <span>{{ index + 1 }}</span>
               </div>
             </div>
@@ -182,7 +214,7 @@ export default {
             <div class="asientos__lista">
               <div v-for="(seat, index) in ['B1', 'B2', 'B3', 'B4', 'B5', 'B6', 'B7']" :key="seat" 
                    :class="['seat', { 'selected': selectedSeats.includes(seat), 'reserved': isReserved(seat) }]" 
-                   @click="toggleSeat(seat)">
+                   @click="isReserved(seat) ? null : toggleSeat(seat)">
                 <span>{{ index + 1 }}</span>
               </div>
             </div>
@@ -318,6 +350,7 @@ export default {
 
   .seat.reserved {
     background: #CECECE;
+    cursor: not-allowed;
   }
 
   .asientos__menu {

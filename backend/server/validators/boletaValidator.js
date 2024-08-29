@@ -1,4 +1,4 @@
-const { body, check, validationResult, param } = require("express-validator");
+const { body, check, validationResult, param, query } = require("express-validator");
 
 // Validación para la creación de un nuevo ticket
 exports.validateNewTicket = () => {
@@ -22,6 +22,23 @@ exports.validateFuncionExists = () => {
     return [
         param('funcionId').notEmpty().withMessage('El ID de la función es requerido').isMongoId().withMessage('El ID de la función debe ser un ID de MongoDB válido'),
         param('sala').notEmpty().withMessage('La sala es requerida').isString().withMessage('La sala debe ser una cadena de caracteres')
+    ];
+};
+
+exports.boletaValidationEmpty = () => {
+    return [
+        body().custom((value, { req }) => {
+            if (Object.keys(req.body).length === 0) {
+                throw new Error('No envíe nada en el cuerpo');
+            }
+            return true;
+        }),
+        query().custom((value, { req }) => {
+            if (Object.keys(req.query).length === 0) {
+                throw new Error('No envíe nada en la url');
+            }
+            return true;
+        })
     ];
 };
 

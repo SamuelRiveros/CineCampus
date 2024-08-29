@@ -43,6 +43,10 @@ export default {
 
 
         const goToChooseseat = () => {
+            if (!selectedCinema.value) {
+                alert('Por favor, selecciona un cine antes de continuar.');
+                return;
+            }
             router.push({ name: 'ChooseSeat', params: { id: route.params.id } });
         };
         
