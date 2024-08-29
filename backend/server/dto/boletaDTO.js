@@ -28,4 +28,11 @@ module.exports = class boletaDTO {
             data: arg
         }
     }
+
+    templateBoletaExists(){
+        return {
+            status: 409,
+            message: "El ticket ya existe"
+        }
+    }
   }

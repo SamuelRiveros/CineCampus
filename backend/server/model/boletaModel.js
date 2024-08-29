@@ -18,8 +18,7 @@ class Boletas extends Connect {
         try {
           return await this.collection.findOne({
             id_cliente: newTicket.id_cliente,
-            columna: newTicket.columna,
-            fila: newTicket.fila,
+            asiento: newTicket.asiento,
             sala: newTicket.sala,
             id_funcion: newTicket.id_funcion
           });

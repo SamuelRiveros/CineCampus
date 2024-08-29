@@ -4,8 +4,7 @@ const { body, check, validationResult, param } = require("express-validator");
 exports.validateNewTicket = () => {
     return [
         body('id_cliente').notEmpty().withMessage('El ID del cliente es requerido').isMongoId().withMessage('El ID del cliente debe ser un ID de MongoDB válido'),
-        body('columna').notEmpty().withMessage('La columna es requerida').isString().withMessage('La columna debe ser una letra'),
-        body('fila').notEmpty().withMessage('La fila es requerida').isInt({ min: 1 }).withMessage('La fila debe ser un número entero positivo'),
+        body('asiento').notEmpty().withMessage('El asiento es requeridd').isArray().withMessage('El asiento debe ser un array'),
         body('sala').notEmpty().withMessage('La sala es requerida').isInt({ min: 1 }).withMessage('La sala debe ser un número entero positivo'),
         body('id_funcion').notEmpty().withMessage('El ID de la función es requerido').isMongoId().withMessage('El ID de la función debe ser un ID de MongoDB válido')
     ];

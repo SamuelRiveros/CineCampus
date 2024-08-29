@@ -1,5 +1,5 @@
 <script>
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 export default {
@@ -13,7 +13,14 @@ export default {
     const selectedSeats = ref([]);
     const selectedDay = ref(null);
     const selectedHour = ref(null);
-    
+
+    // Función para guardar datos en sessionStorage
+    const saveToSessionStorage = () => {
+      sessionStorage.setItem('selectedSeats', JSON.stringify(selectedSeats.value));
+      sessionStorage.setItem('selectedDay', JSON.stringify(selectedDay.value));
+      sessionStorage.setItem('selectedHour', JSON.stringify(selectedHour.value));
+    };
+
     const fetchPelicula = async () => {
       try {
         const response = await fetch(`http://localhost:3001/api/getmoviebyid/${route.params.id}`);
@@ -60,8 +67,8 @@ export default {
     };
 
     const isReserved = (seat) => {
-      //logica de las reservas por hacer
-      return false; // Cambiamos esto según sea necesario
+      // Lógica para determinar si el asiento está reservado
+      return false; // Cambia esto según sea necesario
     };
 
     const toggleSeat = (seat) => {
@@ -70,15 +77,47 @@ export default {
       } else {
         selectedSeats.value.push(seat);
       }
+      saveToSessionStorage(); // Guardar en sessionStorage cada vez que se actualice
     };
-    
-    const handleSubmit = () => {
-      sessionStorage.setItem('selectedSeats', JSON.stringify(selectedSeats.value));
-      sessionStorage.setItem("selectedDay", JSON.stringify(selectedDay.value));
-      sessionStorage.setItem("selectedHour", JSON.stringify(selectedHour.value));
 
-      gotoOrder();
+    const handleSubmit = async () => {
+      // Preparar el payload para el POST
+      const payload = {
+        id_cliente: "66b52ab3416d8d97d3409e26", // Cambia esto según tu lógica.
+        asiento: selectedSeats.value, // Usa la selección actual de asientos
+        sala: 1, // Cambia esto según tu lógica.
+        id_funcion: "66a595c6f6f7d62733068ac9", // Cambia esto según tu lógica.
+        fecha: selectedDay.value, // Usa la fecha seleccionada
+        hora: selectedHour.value // Usa la hora seleccionada
+      };
+
+      try {
+        const response = await fetch('http://localhost:3001/api/buy', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          if (response.status === 409) { // Conflict - Ticket already exists
+            alert(result.errors[0].msg); // Mostrar mensaje de error específico
+          } else {
+            throw new Error('Error buying ticket');
+          }
+        } else {
+          console.log('Ticket bought successfully:', result);
+          gotoOrder();
+        }
+      } catch (error) {
+        console.error('Error buying ticket:', error);
+        alert('El tickete no se ha procesado por que el usuario ya ha comprado un ticket previamente');
+      }
     };
+
 
     const gotoOrder = () => {
       router.push({ name: 'Order', params: { id: route.params.id } });
@@ -87,6 +126,11 @@ export default {
     onMounted(() => {
       fetchPelicula();
     });
+
+    // Observadores para actualizar sessionStorage cuando cambian las selecciones
+    watch(selectedSeats, saveToSessionStorage);
+    watch(selectedDay, saveToSessionStorage);
+    watch(selectedHour, saveToSessionStorage);
 
     return {
       uniqueDays,
@@ -103,9 +147,8 @@ export default {
     };
   }
 };
-
-
 </script>
+
 
 <template>
   <div class="bodychooseseat">
@@ -121,9 +164,8 @@ export default {
       </div>
 
       <form @submit.prevent="handleSubmit">
-        <!-- Código para selección de asientos -->
+        
         <article class="asientos__normal">
-
           <div fila="1">
             <small class="whitetext">A</small>
             <div class="asientos__lista">
@@ -145,11 +187,10 @@ export default {
               </div>
             </div>
           </div>
-          
         </article>
 
         <article class="asientos__preferenciales">
-            <!-- Código para selección de asientos preferenciales -->
+            
         </article>
 
         <article class="asientos__menu">
@@ -195,6 +236,7 @@ export default {
     </section>
   </div>
 </template>
+
 
 <style scoped>
   .bodychooseseat {
