@@ -280,6 +280,8 @@ header .ticketmainheader {
     color: #000; /* Color de texto más oscuro */
     text-align: left; /* Alineación del texto a la izquierda */
     font-weight: bold;
+    overflow-wrap: break-word; /* Ajusta palabras largas */
+    word-wrap: break-word; /* Alternativa a overflow-wrap */
 }
 
 
