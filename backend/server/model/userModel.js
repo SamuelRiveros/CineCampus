@@ -1,5 +1,6 @@
 const Connect = require('../helper/db/connect');
 const { ObjectId } = require('mongodb');
+const bcrypt = require('bcrypt');
 
 class Clientes extends Connect {
     constructor() {
@@ -10,6 +11,11 @@ class Clientes extends Connect {
         this.collection = this.db.collection('cliente');
         Clientes.instance = this;
         return this;
+    }
+
+    // Método para encontrar un usuario por nombre
+    async findOne(query) {
+        return await this.collection.findOne(query);
     }
 
     async listAllUsers() {
@@ -28,7 +34,7 @@ class Clientes extends Connect {
     }
 
     generateRandomPassword(length) {
-        const charset = "abcdefg";
+        const charset = "abcd";
         let password = "";
         for (let i = 0; i < length; i++) {
             const randomIndex = Math.floor(Math.random() * charset.length);
@@ -37,30 +43,36 @@ class Clientes extends Connect {
         return password;
     }
 
-    async findoneusuario(clientData) {
-        return await this.collection.findOne(clientData);
-    }
+    async findoneusuario(query) {
+        return await this.collection.findOne(query);
+    }    
+    
 
-    async createClientAndUser(clientData) {
+    // Método para crear un nuevo cliente con contraseña en hash
+    async createClientAndUser(clientData, pass) {
         try {
-            const password = this.generateRandomPassword(8);
+            const saltRounds = 10;
+            const hashedPassword = await bcrypt.hash(pass.contraseña, saltRounds);
+    
             const rol = clientData.targeta_vip ? "usuarioVip" : "usuarioEstandar";
-
+    
             await this.db.command({
                 createUser: clientData.nombre,
-                pwd: password,
+                pwd: hashedPassword,
                 roles: [
                     { role: rol, db: "CineCampus" },
                     { role: "readWrite", db: "CineCampus" }
                 ]
             });
-
-            await this.collection.insertOne(clientData)
-            console.log("Cliente ingresado en la coleccion de clientes")
-
-            return clientData;
+    
+            // Aquí estamos almacenando el cliente sin la contraseña en texto claro
+            const { contraseña, ...clientDataWithoutPassword } = clientData;
+            await this.collection.insertOne(clientDataWithoutPassword);
+            console.log("Cliente ingresado en la colección de clientes");
+    
+            return clientDataWithoutPassword; // No retornar la contraseña
         } catch (error) {
-            throw new Error(`Error al insertar cliente: ${error}`);
+            throw new Error(`Error al insertar cliente: ${error.message}`);
         } finally {
             await this.close();
         }

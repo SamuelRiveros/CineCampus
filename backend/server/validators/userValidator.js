@@ -8,7 +8,7 @@ exports.userCreationValidation = () => {
 
         body('telefono')
             .notEmpty().withMessage('El teléfono es obligatorio')
-            .isString().withMessage('El teléfono debe ser una cadena'),
+            .isNumeric().withMessage('El teléfono debe ser una cadena'),
 
         body('email')
             .notEmpty().withMessage('El email es obligatorio')
@@ -24,9 +24,14 @@ exports.userCreationValidation = () => {
 
         body('img')
             .optional()
-            .isURL().withMessage('La URL de la imagen debe ser válida')
+            .isURL().withMessage('La URL de la imagen debe ser válida'),
+
+        body('contraseña')
+            .notEmpty().withMessage('La contraseña debe ser obligatoria')
+            .isString().withMessage('La contraseña Debe ser una cadena'),
     ];
 };
+
 
 exports.usuarioEmptyValidation = () => {
     return [

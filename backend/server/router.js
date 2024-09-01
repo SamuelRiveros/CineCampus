@@ -26,6 +26,7 @@ router.get('/getuserbyid/:id', userController.getUserById);
 router.post('/createclient', userController.createClient);
 router.get('/getusersbyrole', userController.getUsersByRole);
 router.put('/updateuser', userController.updateUser);
+router.post('/login', userController.loginUser);
 
 
 // seccion boletas

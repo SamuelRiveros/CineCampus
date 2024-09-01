@@ -4,7 +4,7 @@ module.exports = class UsuarioDTO {
         return {
             status: 201,
             data: arg,
-            message: "Usuario guardado"
+            message: `Usuario guardado`
         }
     }
 
