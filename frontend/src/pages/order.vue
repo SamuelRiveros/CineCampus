@@ -81,14 +81,14 @@ export default {
     };
 
     const startTimer = () => {
-      timer.value = 10; // Reset timer to 10 seconds
-      if (interval) clearInterval(interval); // Clear any existing intervals
+      timer.value = 10; // Reseteamos el timer a 10 segundos
+      if (interval) clearInterval(interval); // Limpiamos cualquier intervalo existente
       interval = setInterval(() => {
         timer.value--;
         if (timer.value <= 0) {
           clearInterval(interval);
           alert('Se acabó tu tiempo para pagar.');
-          router.go(-1); // Go back
+          router.go(-1); // atrás
         }
       }, 1000);
     };
@@ -99,7 +99,7 @@ export default {
     });
 
     onBeforeUnmount(() => {
-      // Clean up the interval when the component is about to be unmounted
+      // Limpiamos el intervalo cuando el componente sea unmounted ( no - mounted )
       if (interval) clearInterval(interval);
     });
 

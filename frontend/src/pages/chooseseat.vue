@@ -174,8 +174,52 @@ export default {
         </article>
 
         <article class="asientos__preferenciales">
-            
+          <div fila="3">
+            <small class="whitetext">C</small>
+            <div class="asientos__lista">
+              <div v-for="(seat, index) in ['C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9']" :key="seat" 
+                   :class="['seat', { 'selected': selectedSeats.includes(seat), 'reserved': isReserved(seat) }]" 
+                   @click="isReserved(seat) ? null : toggleSeat(seat)">
+                <span>{{ index + 1 }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div fila="4">
+            <small class="whitetext">D</small>
+            <div class="asientos__lista">
+              <div v-for="(seat, index) in ['D1', 'D2', 'D3', 'D4', 'D5', 'D6', 'D7', 'D8', 'D9']" :key="seat" 
+                   :class="['seat', { 'selected': selectedSeats.includes(seat), 'reserved': isReserved(seat) }]" 
+                   @click="isReserved(seat) ? null : toggleSeat(seat)">
+                <span>{{ index + 1 }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div fila="5">
+              <small class="whitetext">E</small>
+              <div class="asientos__lista">
+                <div v-for="(seat, index) in ['E1', 'E2', 'E3', 'E4', 'E5', 'E6', 'E7', 'E8', 'E9']" :key="seat" 
+                     :class="['seat', { 'selected': selectedSeats.includes(seat), 'reserved': isReserved(seat) }]" 
+                     @click="isReserved(seat) ? null : toggleSeat(seat)">
+                  <span>{{ index + 1 }}</span>
+                </div>
+              </div>
+            </div>
+  
+            <div fila="6">
+              <small class="whitetext">F</small>
+              <div class="asientos__lista">
+                <div v-for="(seat, index) in ['F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9']" :key="seat" 
+                     :class="['seat', { 'selected': selectedSeats.includes(seat), 'reserved': isReserved(seat) }]" 
+                     @click="isReserved(seat) ? null : toggleSeat(seat)">
+                  <span>{{ index + 1 }}</span>
+                </div>
+              </div>
+            </div>
+
         </article>
+
 
         <article class="asientos__menu">
           <div>
@@ -281,6 +325,7 @@ export default {
 
   .asientos__normal div,
   .asientos__preferenciales div {
+    color: #323232;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -300,6 +345,7 @@ export default {
 
   .seat.selected {
     background: #FE0000;
+    color: white;
   }
 
   .seat.reserved {
@@ -357,7 +403,11 @@ export default {
   }
 
   .day {
-    color: #fff;
+    height: 100px;
+    justify-content: space-around;
+    width: 85px;
+    background-color: white;
+    color: #000000;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -370,8 +420,9 @@ export default {
   }
 
   .day.active {
-    background-color: #ffffff; /* Cambia al color que desees para el estado activo */
-    color: rgb(0, 0, 0);
+    background-color: red; /* Cambia al color que desees para el estado activo */
+    border: none;
+    color: white;
   }
 
   .timecarousel {
@@ -382,7 +433,9 @@ export default {
   }
 
   .time {
-    color: #fff;
+    justify-content: space-around;
+    background-color: white;
+    color: #000000;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -396,8 +449,9 @@ export default {
 
   
   .time.active {
-    background-color: #ffffff; /* Cambia al color que desees para el estado activo */
-    color: rgb(0, 0, 0);
+    background-color: red; /* Cambia al color que desees para el estado activo */
+    border: none;
+    color: white;
   }
 
 
