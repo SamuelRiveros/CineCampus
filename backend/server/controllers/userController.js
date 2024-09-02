@@ -3,6 +3,7 @@ const Clientes = require('../model/userModel');
 const UsuarioDTO = require('../dto/userDTO');
 const userValidator = require('../validators/userValidator');
 const bcrypt = require('bcrypt');
+const { Double } = require('mongodb');
 
 exports.listAllUsers = async (req, res) => {
     await Promise.all(userValidator.usuarioEmptyValidation().map(validator => validator.run(req)));
@@ -74,17 +75,21 @@ exports.loginUser = async (req, res) => {
   try {
     // Buscar el cliente por nombre
     const client = await clienteModel.findoneusuario({ nombre });
+    console.log('Cliente encontrado:', client); // Agregado para depuración
+
     if (!client) {
       return res.status(401).json(userDTO.templateUserError('Usuario no encontrado'));
     }
 
-    // Verificar que el campo de la contraseña esté presente en el cliente
+    // Verificar que el hash de la contraseña esté presente
     if (!client.contraseña) {
       return res.status(500).json(userDTO.templateUserError('Error interno del servidor: contraseña no encontrada'));
     }
 
-    // Comparar la contraseña
+    // Comparar la contraseña proporcionada con el hash almacenado
     const match = await bcrypt.compare(contraseña, client.contraseña);
+    console.log('Contraseña coincidente:', match); // Agregado para depuración
+
     if (!match) {
       return res.status(401).json(userDTO.templateUserError('Contraseña incorrecta'));
     }

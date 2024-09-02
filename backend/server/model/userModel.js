@@ -53,30 +53,33 @@ class Clientes extends Connect {
         try {
             const saltRounds = 10;
             const hashedPassword = await bcrypt.hash(pass.contraseña, saltRounds);
-    
+        
             const rol = clientData.targeta_vip ? "usuarioVip" : "usuarioEstandar";
-    
+        
             await this.db.command({
                 createUser: clientData.nombre,
-                pwd: hashedPassword,
+                pwd: pass.contraseña,
                 roles: [
                     { role: rol, db: "CineCampus" },
                     { role: "readWrite", db: "CineCampus" }
                 ]
             });
     
-            // Aquí estamos almacenando el cliente sin la contraseña en texto claro
-            const { contraseña, ...clientDataWithoutPassword } = clientData;
-            await this.collection.insertOne(clientDataWithoutPassword);
+            // Almacena el cliente con el hash de la contraseña
+            const clientDataWithPassword = { ...clientData, contraseña: hashedPassword };
+        
+            await this.collection.insertOne(clientDataWithPassword);
             console.log("Cliente ingresado en la colección de clientes");
-    
-            return clientDataWithoutPassword; // No retornar la contraseña
+        
+            return clientDataWithPassword;
         } catch (error) {
             throw new Error(`Error al insertar cliente: ${error.message}`);
         } finally {
             await this.close();
         }
     }
+    
+    
 
     async findUsuario(usuarioid) {
         try {

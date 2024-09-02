@@ -14,14 +14,17 @@ export default {
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ username, password })
+                    body: JSON.stringify({ nombre: username, contraseña: password }) // Asegúrate de que los nombres de las claves coincidan
                 });
+
 
                 const data = await response.json();
 
                 if (response.ok) {
+                    alert(`¡ Bienvenid@ a Cinecampus, ${username} !`)
                     router.push({ name: 'Home' });
                 } else {
+                    alert('Error de autenticación: ' + (data.message || 'Credenciales incorrectas'));
                     console.error('Error de autenticación:', data.message);
                 }
             } catch (error) {
@@ -49,7 +52,7 @@ export default {
             <form @submit.prevent="loginUser" class="form login">
                 <div class="form__field">
                     <label for="login__username">
-                        <img src="../../public/assets/icons/user.png" alt="User Icon" class="icon" />
+                        <img src="../../public/assets/icons/user.svg" alt="User Icon" class="icon" />
                         <span class="hidden">Usuario</span>
                     </label>
                     <input
