@@ -127,9 +127,9 @@ export default {
     <header class="headerhome">
       <img :src=usuario.img class="usericon">
       <div class="greeting">
-        <p v-if="usuario">Hi, {{ usuario.nombre }} !</p>
+        <p v-if="usuario">¡ Hola, {{ usuario.nombre }} !</p>
         <p v-else>Loading user. . .</p>
-        <p>Lets watch a movie together!</p>
+        <p>Veamos una pelicula juntos!</p>
       </div>
       <img src="/frontend/public/assets/icons/notification.png" class="notification" />
     </header>
@@ -140,8 +140,8 @@ export default {
       </div>
 
       <div class="nowplaying">
-        <h3 class="whitetext">Now Playing</h3>
-        <p class="redtext">See all</p>
+        <h3 class="whitetext">Ahora Disponible</h3>
+        <p class="redtext">Ver todo</p>
       </div>
 
       <!-- Movie Scroller -->
@@ -171,8 +171,8 @@ export default {
 
       <div class="comingsoonhome">
         <div class="comingsoon">
-          <h3 class="whitetext">Coming Soon</h3>
-          <p class="redtext">See all</p>
+          <h3 class="whitetext">Pronto</h3>
+          <p class="redtext">Ver todo</p>
         </div>
 
         <div class="comingsoonmovie">

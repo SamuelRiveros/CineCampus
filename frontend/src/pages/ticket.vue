@@ -73,7 +73,7 @@ import { useRoute } from 'vue-router';
             </div>
             <div class="moviedata">
                 <h3>{{ pelicula.titulo }}</h3>
-                <p class="graytext">Show this ticket to the entrance</p>
+                <p class="graytext">Muestra el ticket a la entrada</p>
             </div>
     
             <div class="ticketbody">
@@ -89,27 +89,27 @@ import { useRoute } from 'vue-router';
     
                 <div class="ticket-info">
                     <div class="row">
-                        <div class="label">Date</div>
+                        <div class="label">Fecha</div>
                         <div class="content">{{selectedDayStorage}}</div>
                     </div>
                     <div class="row">
-                        <div class="label">Time</div>
+                        <div class="label">Hora</div>
                         <div class="content">{{selectedHourStorage}}</div>
                     </div>
                     <div class="row">
-                        <div class="label">Cinema Hall</div>
+                        <div class="label">Hall del cine</div>
                         <div class="content">Cinema A</div>
                     </div>
                     <div class="row">
-                        <div class="label">Seat</div>
+                        <div class="label">Asiento</div>
                         <div class="content">{{selectedSeatsStorage}}</div>
                     </div>
                     <div class="row">
-                        <div class="label">Cost</div>
+                        <div class="label">Costo</div>
                         <div class="content">$26.99</div>
                     </div>
                     <div class="row">
-                        <div class="label">Ticket ID</div>
+                        <div class="label">ID de Tickete</div>
                         <div class="content" style="text-wrap: wrap;">{{pelicula._id}}</div>
                     </div>
                 </div>

@@ -139,7 +139,7 @@ export default {
   <div class="bodychooseseat">
     <header>
       <img src="/frontend/public/assets/icons/back.svg" class="back" @click="$router.go(-1)" />
-      <h3 class="whitetext">Choose Seat</h3>
+      <h3 class="whitetext">Escoge tu asiento</h3>
       <img src="/frontend/public/assets/icons/threedots.svg" class="dots" />
     </header>
 
@@ -224,25 +224,25 @@ export default {
         <article class="asientos__menu">
           <div>
             <span class="circle available"></span>
-            <label class="whitetext">Available</label>
+            <label class="whitetext">Disponible</label>
           </div>
           <div>
             <span class="circle reserved"></span>
-            <label class="whitetext">Reserved</label>
+            <label class="whitetext">Reservado</label>
           </div>
           <div>
             <span class="circle selected"></span>
-            <label class="whitetext">Selected</label>
+            <label class="whitetext">Seleccionado</label>
           </div>
         </article>
 
         <footer>
           <div class="price whitetext">
-            <p>Price</p>
+            <p>Precio</p>
             <strong>$24,99</strong>
           </div>
 
-          <button type="submit">Proceed to Order</button>
+          <button type="submit">Proceder a la orden</button>
         </footer>
       </form>
 

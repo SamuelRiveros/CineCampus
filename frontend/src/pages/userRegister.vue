@@ -185,6 +185,19 @@ export default {
         position: absolute;
         top: 30px;
         width: 60%;
+        animation: flotar 3s ease-in-out infinite;
+    }
+
+    @keyframes flotar {
+        0% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-20px);
+        }
+        100% {
+            transform: translateY(0);
+        }
     }
 
     .back {
@@ -326,5 +339,14 @@ export default {
 
     p {
     margin: 1.5rem 0;
+    }
+
+    @media only screen and (max-width: 375px) and (min-device-width: 320px) and (orientation: portrait) {
+        .cinecampusimg {
+        position: absolute;
+        top: 30px;
+        width: 30%;
+        animation: flotar 3s ease-in-out infinite;
+        }
     }
 </style>

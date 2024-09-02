@@ -15,10 +15,10 @@ app.use(express.static(path.join(__dirname, '../frontend/dist')));
 // Rutas para APIs
 app.use('/api', router);
 
-// Manejar rutas del frontend con Vue Router
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
-});
+// Manejar rutas del frontend con Vue Router - Esto no es necesario
+// app.get('*', (req, res) => {
+//     res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
+// });
 
 // Manejo de errores 404 para APIs
 app.use('/api/*', (req, res) => {
