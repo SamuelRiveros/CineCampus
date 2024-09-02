@@ -22,7 +22,7 @@ exports.buyTicket = async (req, res) => {
   try {
     // Convertir IDs a ObjectId
     newTicket.id_cliente = new ObjectId(newTicket.id_cliente);
-    newTicket.id_funcion = new ObjectId(newTicket.id_funcion);
+    // newTicket.id_funcion = new ObjectId(newTicket.id_funcion);
 
     // Verificar si el ticket ya existe
     const existingTicket = await boletaModel.findExistingTicket(newTicket);

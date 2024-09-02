@@ -17,10 +17,10 @@ class Boletas extends Connect {
     async findExistingTicket(newTicket) {
         try {
           return await this.collection.findOne({
-            id_cliente: newTicket.id_cliente,
+            // id_cliente: newTicket.id_cliente,
             asiento: newTicket.asiento,
-            sala: newTicket.sala,
-            id_funcion: newTicket.id_funcion
+            // sala: newTicket.sala,
+            // id_funcion: newTicket.id_funcion
           });
         } catch (error) {
           console.error('Error finding existing ticket:', error);

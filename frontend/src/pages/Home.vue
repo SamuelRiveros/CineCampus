@@ -98,8 +98,17 @@ export default {
     });
 
     onMounted(() => {
+
+      const userId = localStorage.getItem('userId'); // Obtener el _id del usuario del localStorage
+      if (userId) {
+        fetchUsuario(userId);
+      } else {
+        console.error('No user ID found in localStorage.');
+      }
+
+
       fetchPeliculas();
-      fetchUsuario('66b52ab3416d8d97d3409e26');
+      // fetchUsuario('66b52ab3416d8d97d3409e26');
       
       if (scroller.value) {
         scroller.value.addEventListener('scroll', updateActiveIndex);

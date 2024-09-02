@@ -32,16 +32,19 @@ export default {
     };
 
     const handleBuyTicket = async () => {
+
+      const userId = localStorage.getItem('userId');
+
       if (!selectedDay.value || !selectedHour.value || selectedSeats.value.length === 0) {
         alert('Por favor, selecciona un día, una hora y al menos un asiento antes de continuar.');
         return;
       }
 
       const payload = {
-        id_cliente: "66b52ab3416d8d97d3409e26", 
+        id_cliente: userId,  // Aqui debería ir el id del usuario, en este caso se llama "id_cliente"
         asiento: selectedSeats.value, 
         sala: 1, 
-        id_funcion: "66a595c6f6f7d62733068ac9", 
+        // id_funcion: "66a595c6f6f7d62733068ac9", // MENCIONAMOS por que no es necesario ingresar el campo id_funcion en boleta, al usuario no le interesa eso
         fecha: selectedDay.value, 
         hora: selectedHour.value 
       };

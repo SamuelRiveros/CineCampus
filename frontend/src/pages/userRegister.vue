@@ -11,6 +11,7 @@ export default {
       telefono: '',
       contraseña: '',
       img: "https://i.imgur.com/36d7HFU.png"
+      // Puedes descomentar estos campos cuando quieras activarlos
       // targeta_vip: false,
       // admin: false
     });
@@ -30,7 +31,11 @@ export default {
         const data = await response.json();
 
         if (response.ok) {
-          alert(`¡ Te has registrado correctamente ${form.value.nombre} !`);
+          // Guarda el _id en localStorage
+          localStorage.setItem('userId', data.data._id); // Ajusta esto según cómo se devuelve el _id en la respuesta
+
+          alert(`¡Te has registrado correctamente ${form.value.nombre}!`);
+          console.log(data._id) // me muestra undefined en consola
           router.push({ name: 'Home' });
         } else {
           alert('Error de autenticación: ' + (data.message || 'Credenciales incorrectas'));
@@ -40,6 +45,7 @@ export default {
         console.error('Error al autenticar usuario:', error);
       }
     };
+
 
     return { form, registerUser };
   }
@@ -122,7 +128,23 @@ export default {
           />
         </div>
 
-        <!-- Targeta VIP -->
+        <!-- Imagen -->
+        <div class="form__field">
+          <label for="register__img">
+            Imagen
+          </label>
+          <input
+            id="register__img"
+            type="text"
+            name="img"
+            class="form__input"
+            placeholder="URL de la Imagen"
+            v-model="form.img"
+            disabled
+          />
+        </div>
+
+        <!-- Targeta VIP (comentado por ahora) -->
         <!-- <div class="form__field">
           <label for="register__vip">
             Targeta VIP
@@ -135,7 +157,7 @@ export default {
           />
         </div> -->
 
-        <!-- Admin -->
+        <!-- Admin (comentado por ahora) -->
         <!-- <div class="form__field">
           <label for="register__admin">
             Admin
@@ -237,6 +259,7 @@ export default {
     .form input[type='password'],
     .register input[type='email'],
     .form input[type='text'],
+    .form input[type='number'],
     .form input[type='submit'] {
     width: 100%;
     }
@@ -256,6 +279,7 @@ export default {
 
     .register label,
     .register input[type='text'],
+    .form input[type='number'],
     .register input[type='email'],
     .register input[type='password'],
     .register input[type='submit'] {
@@ -272,6 +296,7 @@ export default {
 
     .register input[type='password'],
     .register input[type='email'],
+    .form input[type='number'],
     .register input[type='text'] {
     background-color: #3b4148;
     border-bottom-left-radius: 0;
@@ -279,6 +304,7 @@ export default {
     }
 
     .register input[type='password']:focus,
+    .form input[type='number']:focus,
     .register input[type='email']:focus,
     .register input[type='password']:hover,
     .register input[type='text']:focus,
