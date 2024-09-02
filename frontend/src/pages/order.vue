@@ -121,7 +121,7 @@ export default {
     <header>
       <div class="ordermainheader">
         <img src="/frontend/public/assets/icons/back.svg" class="back" @click="$router.go(-1)">
-        <h3 class="whitetext">Order Summary</h3>
+        <h3 class="whitetext">Resumen de la orden</h3>
         <img src="/frontend/public/assets/icons/threedots.svg" class="dots">
       </div>
 
@@ -144,7 +144,7 @@ export default {
     </header>
 
     <div class="ordernumber">
-      <span class="graytext">Order Number: </span><span class="whitetext">-| {{ pelicula._id }}</span>.
+      <span class="graytext">Numero de orden: </span><span class="whitetext">-| {{ pelicula._id }}</span>.
     </div>
 
     <section class="ordermain">
@@ -154,27 +154,27 @@ export default {
           <span class="right">{{ selectedSeats.join(', ') }}</span>
         </div>
         <div class="order-row">
-          <span class="left">Regular Seat</span>
+          <span class="left">Asiento</span>
           <span class="right">$24,99</span>
         </div>
         <div class="order-row">
-          <span class="left">Service Fee</span>
+          <span class="left">Impuesto de servicio</span>
           <span class="right">$1,99</span>
         </div>
       </div>
     </section>
   
     <div class="payment">
-      <h3 class="whitetext">Payment Method</h3>
+      <h3 class="whitetext">Metodo de pago</h3>
 
       <div class="paymentTime">
-        <span class="graytext">Complete your payment in</span>
+        <span class="graytext">Completa tu pago en</span>
         <span class="redtext">{{ timer }}</span>
       </div>
     </div>
 
     <footer>
-      <button class="buyticket" @click="handleBuyTicket">Buy Ticket</button>
+      <button class="buyticket" @click="handleBuyTicket">Comprar Ticket</button>
     </footer>
   </div>
   <div v-else>
@@ -249,8 +249,8 @@ header .ordermainheader {
 }
 
 .moviesummaryimgzone img {
-    width: 33%; /* Este valor depende del tamaño del contenedor padre */
-    max-width: 100%; /* Asegúrate de que las imágenes no excedan el ancho disponible */
+    width: 33%; 
+    max-width: 100%; 
 }
 
 .moviesummarytext {
@@ -276,28 +276,28 @@ header .ordermainheader {
 .order-summary {
     display: flex;
     flex-direction: column;
-    width: 500px; /* Ancho del contenedor, ajusta según sea necesario */
-    padding: 10px; /* Espaciado interno */
-    border-radius: 5px; /* Bordes redondeados */
+    width: 500px; 
+    padding: 10px; 
+    border-radius: 5px; 
 }
 
 .order-row {
-    display: flex; /* Usamos flexbox para alinear los elementos en la fila */
-    justify-content: space-between; /* Alinea los elementos en los extremos */
-    padding: 8px 0; /* Espaciado vertical entre filas */
-    border-bottom: 1px solid #ddd; /* Línea divisoria inferior */
+    display: flex; 
+    justify-content: space-between; 
+    padding: 8px 0; 
+    border-bottom: 1px solid #ddd; 
 }
 
 /* Estilo para los elementos alineados a la izquierda */
 .left {
     color: #585858;
-    font-weight: bold; /* Negrita para destacar */
+    font-weight: bold; 
     font-size: 20px;
 }
 
 /* Estilo para los elementos alineados a la derecha */
 .right {
-    color: #585858; /* Color del texto */
+    color: #585858; 
     font-size: 20px;
 }
   
@@ -313,42 +313,42 @@ header .ordermainheader {
 }
 
 .payment-method {
-    display: flex; /* Usamos Flexbox para alinear el logo y los detalles en una fila */
-    align-items: center; /* Centra los elementos verticalmente */
-    border: 1px solid #ccc; /* Borde alrededor del contenedor */
-    padding: 10px; /* Espaciado interno */
-    border-radius: 5px; /* Bordes redondeados */
-    width: 350px; /* Ancho del contenedor, ajusta según sea necesario */
+    display: flex; 
+    align-items: center; 
+    border: 1px solid #ccc; 
+    padding: 10px; 
+    border-radius: 5px; 
+    width: 350px; 
     height: 80px;
-    background-color: #202020; /* Color de fondo del contenedor */
+    background-color: #202020; 
   }
   
   /* Estilo del logo de la tarjeta */
   .card-logo {
-    width: 50px; /* Ancho del logo */
+    width: 50px; 
     max-width: 50px;
-    height: auto; /* Mantiene la proporción del logo */
-    margin-right: 15px; /* Espaciado a la derecha del logo */
+    height: auto; 
+    margin-right: 15px; 
   }
   
   /* Estilo del contenedor de detalles de la tarjeta */
   .card-details {
-    display: flex; /* Usamos Flexbox para alinear verticalmente */
-    flex-direction: column; /* Coloca el nombre y número de la tarjeta en una columna */
+    display: flex; 
+    flex-direction: column; 
   }
   
   /* Estilo del nombre de la tarjeta */
   .card-name {
-    font-size: 16px; /* Tamaño de fuente del nombre de la tarjeta */
-    font-weight: bold; /* Negrita para el nombre */
-    color: #ffffff; /* Color del texto */
-    margin-bottom: 5px; /* Espacio inferior entre el nombre y el número */
+    font-size: 16px; 
+    font-weight: bold; 
+    color: #ffffff; 
+    margin-bottom: 5px; 
   }
   
   /* Estilo del número de la tarjeta */
   .card-number {
-    font-size: 14px; /* Tamaño de fuente del número de la tarjeta */
-    color: #ffffff; /* Color del texto */
+    font-size: 14px;
+    color: #ffffff; 
   }
   
 .paymentTime {
@@ -379,7 +379,7 @@ footer {
 
 footer button {
     position: relative;
-    padding: 20px 100px; /* Define el tamaño del botón principalmente con padding */
+    padding: 20px 100px;
     border-radius: 6px;
     border: none;
     color: #fff;
@@ -396,7 +396,7 @@ footer button:before,
 footer button:after {
     position: absolute;
     content: "";
-    width: 150%; /* Proporcional al tamaño del botón */
+    width: 150%; 
     left: 50%;
     height: 100%;
     transform: translateX(-50%);

@@ -100,6 +100,19 @@ export default {
         position: absolute;
         top: 30px;
         width: 60%;
+        animation: flotar 3s ease-in-out infinite;
+    }
+
+    @keyframes flotar {
+        0% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-20px);
+        }
+        100% {
+            transform: translateY(0);
+        }
     }
 
     .align {
@@ -232,4 +245,14 @@ export default {
         color: white;
         text-align: center;
     }
+
+    @media only screen and (max-width: 375px) and (min-device-width: 320px) and (orientation: portrait) {
+        .cinecampusimg {
+        position: absolute;
+        top: 30px;
+        width: 50%;
+        animation: flotar 3s ease-in-out infinite;
+        }
+    }
+
 </style>

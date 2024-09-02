@@ -67,7 +67,7 @@ export default {
   <div class="cinemabody" v-if="pelicula">
     <header>
         <img src="/frontend/public/assets/icons/back.svg" class="back" @click="$router.go(-1)">
-        <h3>Cinema Selection</h3>
+        <h3>Seleccion de Cine</h3>
         <img src="/frontend/public/assets/icons/threedots.svg" class="dots">
     </header>
 
@@ -84,7 +84,7 @@ export default {
                 <p class="graytext">{{ pelicula.descripcion }}</p>
             </div>
 
-            <button class="watchtrailer" @click="watchTrailer()">¡ Watch Trailer !</button>
+            <button class="watchtrailer" @click="watchTrailer()">¡ Mira el Trailer !</button>
         </div>
 
 
@@ -136,7 +136,7 @@ export default {
 
     </section>
     <footer>
-        <button class="booknow" @click="goToChooseseat()">Book Now</button>
+        <button class="booknow" @click="goToChooseseat()">Confirmar</button>
     </footer>
   </div>
   <div v-else>
